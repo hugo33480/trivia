@@ -151,14 +151,26 @@ export class Game {
   }
 
   private askQuestion(): void {
-    if (this.currentCategory() == "Pop")
-      this._console.WriteLine(this.popQuestions.shift()!);
-    if (this.currentCategory() == "Science")
-      this._console.WriteLine(this.scienceQuestions.shift()!);
-    if (this.currentCategory() == "Sports")
-      this._console.WriteLine(this.sportsQuestions.shift()!);
-    if (this.currentCategory() == "Rock")
-      this._console.WriteLine(this.rockOrTechnoQuestions.shift()!);
+    if (this.currentCategory() == "Pop") {
+      const question = this.popQuestions.shift();
+      this._console.WriteLine(question);
+      this.popQuestions.unshift(question);
+    }
+    if (this.currentCategory() == "Science") {
+      const question = this.scienceQuestions.shift();
+      this._console.WriteLine(question);
+      this.scienceQuestions.unshift(question);
+    }
+    if (this.currentCategory() == "Sports") {
+      const question = this.sportsQuestions.shift();
+      this._console.WriteLine(question);
+      this.sportsQuestions.unshift(question);
+    }
+    if (this.currentCategory() == "Rock") {
+      const question = this.rockOrTechnoQuestions.shift();
+      this._console.WriteLine(question);
+      this.rockOrTechnoQuestions.unshift(question);
+    }
   }
 
   private currentCategory(): string {
