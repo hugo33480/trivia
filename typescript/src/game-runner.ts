@@ -11,7 +11,7 @@ export class GameRunner {
 
         if (game.giveUp()) {
           notAWinner = game.didPlayerWin();
-        } else if (Math.floor(Math.random() * 10) == 7) {
+        } else if (Math.floor(Math.random() * 10) == 7 || game.players[game.currentPlayer].alwaysFalseAnswer) {
           notAWinner = game.wrongAnswer();
         } else {
           notAWinner = game.wasCorrectlyAnswered();
