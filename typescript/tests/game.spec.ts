@@ -100,6 +100,7 @@ describe("The test environment", () => {
     );
     expect(console.Content).toContain("Hugo leaves the game");
     expect(console.Content).toContain("Nicolas wins the game");
+    expect(console.Content.match(/Hugo is the current player/g).length).toBe(1)
   });
 
 
