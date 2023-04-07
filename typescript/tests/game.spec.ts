@@ -26,7 +26,7 @@ describe("The test environment", () => {
 
   it("should test rock question by default", function () {
     const console = new ConsoleSpy();
-    GameRunner.main(new GameBuilder().withCustomConsole(console).build());
+    GameRunner.main(new GameBuilder().withCustomConsole(console).withCoinGoal(15).build());
     expect(console.Content).toContain("Rock Question");
     expect(console.Content).not.toContain("Techno Question");
   });
@@ -130,7 +130,7 @@ describe("The test environment", () => {
 
   it("should increment streak", function () {
     const console = new ConsoleSpy();
-    GameRunner.main(new GameBuilder().withPlayers([new Player('Rémi'), new Player("Théo")]).withFirstPlayerWithOnlyTrueAnswer().withCustomConsole(console).build());
+    GameRunner.main(new GameBuilder().withPlayers([new Player('Rémi'), new Player("Théo")]).withFirstPlayerWithOnlyTrueAnswer().withCustomConsole(console).withCoinGoal(7).build());
     expect(console.Content).toContain("Rémi streak is now 2");
     expect(console.Content).toContain("Rémi streak is now 3");
     expect(console.Content).toContain("Rémi now has 3 Gold Coins.");
