@@ -72,14 +72,15 @@ export class Game {
   public isNumberOfPlayerValid() {
     if (this.howManyPlayers() >= 2 && this.howManyPlayers() <= 6) return true
     this._console.WriteLine(
-        "The game should contain 2 players minimum and 6 players maximum"
+      "The game should contain 2 players minimum and 6 players maximum"
     );
-    return false;  }
+    return false;
+  }
 
   public isCoinGoalValid() {
     if (this._coinGoal > 5) return true;
     this._console.WriteLine(
-        "The coin goal must be 6 or higher"
+      "The coin goal must be 6 or higher"
     );
     return false;
   }

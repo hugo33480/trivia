@@ -28,4 +28,4 @@ export class GameRunner {
   }
 }
 
-GameRunner.main(new GameBuilder().build());
+GameRunner.main(new GameBuilder().withCoinGoal(15).build());
