@@ -88,7 +88,7 @@ describe("The test environment", () => {
         .build()
     );
     expect(console.Content).toContain("Hugo leaves the game");
-    expect(console.Content).toContain("Nicolas win the game");
+    expect(console.Content).toContain("Nicolas wins the game");
   });
 
   it("should a player can use a joker if he has one left", function () {
@@ -103,4 +103,17 @@ describe("The test environment", () => {
     expect(console.Content).toContain("uses a joker");
     expect(console.Content).toContain("doesn't earn gold this turn");
   })
+
+    it("should set coin goal to 7", function () {
+        const console = new ConsoleSpy();
+        GameRunner.main(new GameBuilder().withCoinGoal(7).withCustomConsole(console).build());
+        expect(console.Content).toContain("now has 7 Gold Coins.");
+        expect(console.Content).toContain("wins the game");
+    });
+
+    it("should set coin goal to 5 then game not start", function () {
+        const console = new ConsoleSpy();
+        GameRunner.main(new GameBuilder().withCoinGoal(5).withCustomConsole(console).build());
+        expect(console.Content).toContain("The coin goal must be 6 or higher");
+    });
 });
