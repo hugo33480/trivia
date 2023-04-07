@@ -103,7 +103,6 @@ describe("The test environment", () => {
     expect(console.Content.match(/Hugo is the current player/g).length).toBe(1)
   });
 
-
   it("should a player can use a joker if he has one left", function () {
     const console = new ConsoleSpy();
     GameRunner.main(new GameBuilder().withCustomConsole(console).withForceJoker().build());
@@ -119,8 +118,9 @@ describe("The test environment", () => {
   it("should not earn a gold when player uses a joker", function () {
     const console = new ConsoleSpy();
     GameRunner.main(new GameBuilder().withCustomConsole(console).withForceJoker().build());
-    expect(console.Content).toContain("uses a joker");
-    expect(console.Content).toContain("doesn't earn gold this turn");
+    expect(console.Content).toContain("Pat is the current player. Has 0 gold");
+    expect(console.Content).toContain("Pat uses a joker");
+    expect(console.Content).toContain("Pat doesn't earn gold this turn. He has 0 gold");
   })
 
   it("should the player who goes to jail chooses the following category", function () {

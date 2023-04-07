@@ -95,15 +95,15 @@ export class Game {
     if (this.currentPlayer == this.players.length) this.currentPlayer = 0;
   }
 
-  public roll(roll: number) {
+  public roll(roll: number, nb_round: number) {
     if (this.players[this.currentPlayer].alwaysGetOutOfPenaltyBox) {
       roll = 3;
     }
 
     this._console.WriteLine(" ");
-    this._console.WriteLine("---------- New game round ----------");
+    this._console.WriteLine("---------- New game round  ----------");
     this._console.WriteLine(
-      this.players[this.currentPlayer].name + " is the current player"
+      "It's round : " + nb_round +" => " + this.players[this.currentPlayer].name + " is the current player. Has " + this.players[this.currentPlayer].gold + " gold"
     );
     this._console.WriteLine("They have rolled a " + roll);
 
@@ -134,13 +134,8 @@ export class Game {
         if (!this.useJoker(this.players[this.currentPlayer])) {
           this.askQuestion();
         } else {
-          this._console.WriteLine(
-            this.players[this.currentPlayer].name + " uses a joker"
-          );
-          this._console.WriteLine(
-            this.players[this.currentPlayer].name +
-              " doesn't earn gold this turn"
-          );
+          this._console.WriteLine(this.players[this.currentPlayer].name + ' uses a joker');
+          this._console.WriteLine(this.players[this.currentPlayer].name + ' doesn\'t earn gold this turn. He has ' + this.players[this.currentPlayer].gold + " gold");
         }
       } else {
         this._console.WriteLine(
@@ -166,12 +161,8 @@ export class Game {
       if (!this.useJoker(this.players[this.currentPlayer])) {
         this.askQuestion();
       } else {
-        this._console.WriteLine(
-          this.players[this.currentPlayer].name + " uses a joker"
-        );
-        this._console.WriteLine(
-          this.players[this.currentPlayer].name + " doesn't earn gold this turn"
-        );
+        this._console.WriteLine(this.players[this.currentPlayer].name + ' uses a joker');
+        this._console.WriteLine(this.players[this.currentPlayer].name + ' doesn\'t earn gold this turn. He has ' + this.players[this.currentPlayer].gold + " gold");
       }
     }
   }
