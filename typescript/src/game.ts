@@ -38,7 +38,7 @@ export class Game {
     for (const player of players) {
       this.add(player);
     }
-    for (let i = 0; i < 50; i++) {
+    for (let i = 0; i < 1; i++) {
       this.popQuestions.push("Pop Question " + i);
       this.scienceQuestions.push("Science Question " + i);
       this.sportsQuestions.push("Sports Question " + i);
@@ -154,22 +154,22 @@ export class Game {
     if (this.currentCategory() == "Pop") {
       const question = this.popQuestions.shift();
       this._console.WriteLine(question);
-      this.popQuestions.unshift(question);
+      this.popQuestions.push(question);
     }
     if (this.currentCategory() == "Science") {
       const question = this.scienceQuestions.shift();
       this._console.WriteLine(question);
-      this.scienceQuestions.unshift(question);
+      this.scienceQuestions.push(question);
     }
     if (this.currentCategory() == "Sports") {
       const question = this.sportsQuestions.shift();
       this._console.WriteLine(question);
-      this.sportsQuestions.unshift(question);
+      this.sportsQuestions.push(question);
     }
     if (this.currentCategory() == "Rock") {
       const question = this.rockOrTechnoQuestions.shift();
       this._console.WriteLine(question);
-      this.rockOrTechnoQuestions.unshift(question);
+      this.rockOrTechnoQuestions.push(question);
     }
   }
 
