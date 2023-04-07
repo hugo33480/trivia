@@ -7,7 +7,18 @@ describe("The test environment", () => {
   it("should test techno question", function () {
     const console = new ConsoleSpy();
     GameRunner.main(
-      new GameBuilder().withTechnoQuestions().withCustomConsole(console).build()
+        new GameBuilder()
+            .withPlayers([
+              new Player("Rémi"),
+              new Player("Théo"),
+              new Player("Nicolas"),
+              new Player("Florian"),
+              new Player("Gauthier"),
+              new Player("Hugo")
+            ])
+            .withTechnoQuestions()
+            .withCustomConsole(console)
+            .build()
     );
     expect(console.Content).toContain("Techno Question");
     expect(console.Content).not.toContain("Rock Question");

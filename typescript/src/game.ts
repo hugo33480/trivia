@@ -177,7 +177,7 @@ export class Game {
   public didPlayerWin(): boolean {
     if (
       this.players.length === 1 ||
-      this.players[this.currentPlayer].gold == this._coinGoal
+      this.players[this.currentPlayer].gold >= this._coinGoal
     ) {
       this._console.WriteLine(
         this.players[this.currentPlayer].name + " wins the game"
