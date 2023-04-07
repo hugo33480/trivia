@@ -1,6 +1,6 @@
-import { Game } from "./game";
-import { GameBuilder } from "./GameBuilder";
-import { Player } from "./Player";
+import {Game} from "./game";
+import {GameBuilder} from "./GameBuilder";
+import {Player} from "./Player";
 
 export class GameRunner {
   public static main(game: Game): void {
