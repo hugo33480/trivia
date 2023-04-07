@@ -127,7 +127,6 @@ describe("The test environment", () => {
     GameRunner.main(new GameBuilder().withPlayers([new Player('Rémi'), new Player("blbal")]).withFirstPlayerWithOnlyFalseAnswer().withNeverUseJoker().withCustomConsole(console).build());
     expect(console.Content).toContain("has chosen the next category");
   });
-  });
 
   it("should increment streak", function () {
     const console = new ConsoleSpy();
