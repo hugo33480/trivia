@@ -110,11 +110,23 @@ describe("The test environment", () => {
     expect(console.Content).toContain("uses a joker");
   });
 
+  it("should a player cannot use a joker", function () {
+    const console = new ConsoleSpy();
+    GameRunner.main(new GameBuilder().withCustomConsole(console).withNeverUseJoker().build());
+    expect(console.Content).not.toContain("uses a joker");
+  })
+
   it("should not earn a gold when player uses a joker", function () {
     const console = new ConsoleSpy();
     GameRunner.main(new GameBuilder().withCustomConsole(console).withForceJoker().build());
     expect(console.Content).toContain("uses a joker");
     expect(console.Content).toContain("doesn't earn gold this turn");
+  })
+
+  it("should the player who goes to jail chooses the following category", function () {
+    const console = new ConsoleSpy();
+    GameRunner.main(new GameBuilder().withPlayers([new Player('Rémi'), new Player("blbal")]).withFirstPlayerWithOnlyFalseAnswer().withNeverUseJoker().withCustomConsole(console).build());
+    expect(console.Content).toContain("has chosen the next category");
   });
 
   it("should increment streak", function () {

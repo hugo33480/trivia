@@ -6,7 +6,7 @@ export class Game {
   private _forceJoker: boolean = false;
   private purses: Array<number> = [];
   private _currentPlayer: number = 0;
-
+  private _currentCategoryChoosed: string = "";
   private popQuestions: Array<string> = [];
   private scienceQuestions: Array<string> = [];
   private sportsQuestions: Array<string> = [];
@@ -17,7 +17,6 @@ export class Game {
   get console(): IConsole {
     return this._console;
   }
-
 
   get players(): Array<Player> {
     return this._players;
@@ -162,16 +161,20 @@ export class Game {
   }
 
   private currentCategory(): string {
-    if (this.players[this.currentPlayer].place == 0) return "Pop";
-    if (this.players[this.currentPlayer].place == 4) return "Pop";
-    if (this.players[this.currentPlayer].place == 8) return "Pop";
-    if (this.players[this.currentPlayer].place == 1) return "Science";
-    if (this.players[this.currentPlayer].place == 5) return "Science";
-    if (this.players[this.currentPlayer].place == 9) return "Science";
-    if (this.players[this.currentPlayer].place == 2) return "Sports";
-    if (this.players[this.currentPlayer].place == 6) return "Sports";
-    if (this.players[this.currentPlayer].place == 10) return "Sports";
-    return "Rock";
+    if (this._currentCategoryChoosed === "") {
+      if (this.players[this.currentPlayer].place == 0) return "Pop";
+      if (this.players[this.currentPlayer].place == 4) return "Pop";
+      if (this.players[this.currentPlayer].place == 8) return "Pop";
+      if (this.players[this.currentPlayer].place == 1) return "Science";
+      if (this.players[this.currentPlayer].place == 5) return "Science";
+      if (this.players[this.currentPlayer].place == 9) return "Science";
+      if (this.players[this.currentPlayer].place == 2) return "Sports";
+      if (this.players[this.currentPlayer].place == 6) return "Sports";
+      if (this.players[this.currentPlayer].place == 10) return "Sports";
+      return "Rock";
+    } else {
+      return this._currentCategoryChoosed
+    }
   }
 
   public didPlayerWin(): boolean {
@@ -205,6 +208,8 @@ export class Game {
   public wrongAnswer(): boolean {
     if (!this.players[this.currentPlayer].joker_is_use_now) {
       this._console.WriteLine('Question was incorrectly answered');
+      this.chooseNextCategory();
+      this._console.WriteLine(this.players[this.currentPlayer].name + " has chosen the next category which is : " + this._currentCategoryChoosed);
       this._console.WriteLine(this.players[this._currentPlayer].name + " was sent to the penalty box");
       this._players[this._currentPlayer].inPenaltyBox = true;
       this._console.WriteLine(`${this.players[this._currentPlayer].name} answer streak was reset to 0`);
@@ -218,6 +223,24 @@ export class Game {
     if (this.currentPlayer == this.players.length)
       this.currentPlayer = 0;
     return true;
+  }
+
+  public chooseNextCategory() {
+    const randomRoll = Math.floor(Math.random() * 4);
+    switch (randomRoll) {
+      case 0:
+        this._currentCategoryChoosed = "Pop";
+        break;
+      case 1:
+        this._currentCategoryChoosed = "Science";
+        break;
+      case 2:
+        this._currentCategoryChoosed = "Sports";
+        break;
+      case 3:
+        this._currentCategoryChoosed = "Rock";
+        break;
+    }
   }
 
   public wasCorrectlyAnswered(): boolean {
@@ -256,6 +279,7 @@ export class Game {
   }
 
   public useJoker(player: Player) {
+    if (this._neverUseJoker) return false;
     if (this._forceJoker && player.joker) {
       player.joker = false;
       player.joker_is_use_now = true
