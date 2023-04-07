@@ -94,15 +94,15 @@ export class Game {
     this._console.WriteLine(" ");
     this._console.WriteLine("---------- New game round  ----------");
     this._console.WriteLine(
-      "It's round : " + nb_round +" => " + this.players[this.currentPlayer].name + " is the current player. Has " + this.players[this.currentPlayer].gold + " gold"
+      "[round " + nb_round + "] " + this.players[this.currentPlayer].name + " is the current player. Has " + this.players[this.currentPlayer].gold + " gold"
     );
-    this._console.WriteLine("They have rolled a " + roll);
+    this._console.WriteLine("[round " + nb_round + "] " + "They have rolled a " + roll);
 
     if (this.players[this.currentPlayer].inPenaltyBox) {
       if (roll % 2 != 0) {
         this.players[this.currentPlayer].inPenaltyBox = false;
         this._console.WriteLine(
-          this.players[this.currentPlayer].name +
+          "[round " + nb_round + "] " + this.players[this.currentPlayer].name +
           " is getting out of the penalty box"
         );
         this.players[this.currentPlayer].place =
@@ -113,19 +113,20 @@ export class Game {
         }
 
         this._console.WriteLine(
-          this.players[this.currentPlayer].name +
+          "[round " + nb_round + "] " + this.players[this.currentPlayer].name +
           "'s new location is " +
           this.players[this.currentPlayer].place
         );
-        this._console.WriteLine("The category is " + this.currentCategory());
+        this._console.WriteLine("[round " + nb_round + "] " + "The category is " + this.currentCategory());
         if (!this.useJoker(this.players[this.currentPlayer])) {
-          this.askQuestion();
+          this.askQuestion(nb_round);
         } else {
-          this._console.WriteLine(this.players[this.currentPlayer].name + ' uses a joker');
-          this._console.WriteLine(this.players[this.currentPlayer].name + ' doesn\'t earn gold this turn. He has ' + this.players[this.currentPlayer].gold + " gold");
+          this._console.WriteLine("[round " + nb_round + "] " + this.players[this.currentPlayer].name + ' uses a joker');
+          this._console.WriteLine("[round " + nb_round + "] " + this.players[this.currentPlayer].name + ' doesn\'t earn gold this turn. He has ' + this.players[this.currentPlayer].gold + " gold");
         }
       } else {
         this._console.WriteLine(
+          "[round " + nb_round + "] " +
           this.players[this.currentPlayer].name +
           " is not getting out of the penalty box"
         );
@@ -138,29 +139,30 @@ export class Game {
       }
 
       this._console.WriteLine(
+        "[round " + nb_round + "] " +
         this.players[this.currentPlayer].name +
         "'s new location is " +
         this.players[this.currentPlayer].place
       );
-      this._console.WriteLine("The category is " + this.currentCategory());
+      this._console.WriteLine("[round " + nb_round + "] " + "The category is " + this.currentCategory());
       if (!this.useJoker(this.players[this.currentPlayer])) {
-        this.askQuestion();
+        this.askQuestion(nb_round);
       } else {
-        this._console.WriteLine(this.players[this.currentPlayer].name + ' uses a joker');
-        this._console.WriteLine(this.players[this.currentPlayer].name + ' doesn\'t earn gold this turn. He has ' + this.players[this.currentPlayer].gold + " gold");
+        this._console.WriteLine("[round " + nb_round + "] " + this.players[this.currentPlayer].name + ' uses a joker');
+        this._console.WriteLine("[round " + nb_round + "] " + this.players[this.currentPlayer].name + ' doesn\'t earn gold this turn. He has ' + this.players[this.currentPlayer].gold + " gold");
       }
     }
   }
 
-  private askQuestion(): void {
+  private askQuestion(nb_round: number): void {
     if (this.currentCategory() == "Pop")
-      this._console.WriteLine(this.popQuestions.shift()!);
+      this._console.WriteLine("[round " + nb_round + "] " + this.popQuestions.shift()!);
     if (this.currentCategory() == "Science")
-      this._console.WriteLine(this.scienceQuestions.shift()!);
+      this._console.WriteLine("[round " + nb_round + "] " + this.scienceQuestions.shift()!);
     if (this.currentCategory() == "Sports")
-      this._console.WriteLine(this.sportsQuestions.shift()!);
+      this._console.WriteLine("[round " + nb_round + "] " + this.sportsQuestions.shift()!);
     if (this.currentCategory() == "Rock")
-      this._console.WriteLine(this.rockOrTechnoQuestions.shift()!);
+      this._console.WriteLine("[round " + nb_round + "] " + this.rockOrTechnoQuestions.shift()!);
     this._currentCategoryChoosed = ""
   }
 
@@ -181,26 +183,26 @@ export class Game {
     }
   }
 
-  public didPlayerWin(): boolean {
+  public didPlayerWin(nb_round: number): boolean {
     if (
       this.players.length === 1 ||
       this.players[this.currentPlayer].gold >= this._coinGoal
     ) {
       this._console.WriteLine(
-        this.players[this.currentPlayer].name + " wins the game"
+        "[round " + nb_round + "] " + this.players[this.currentPlayer].name + " wins the game"
       );
       return false;
     }
     return true;
   }
 
-  public giveUp(): boolean {
+  public giveUp(nb_round: number): boolean {
     if (
       Math.floor(Math.random() * 6) == 6 ||
       this.players[this.currentPlayer].giveUp
     ) {
       this._console.WriteLine(
-        this.players[this.currentPlayer].name + " leaves the game"
+        "[round " + nb_round + "] " + this.players[this.currentPlayer].name + " leaves the game"
       );
       this.players.splice(this.currentPlayer, 1);
       if (this.currentPlayer == this.players.length) this.currentPlayer = 0;
@@ -209,14 +211,14 @@ export class Game {
     return false;
   }
 
-  public wrongAnswer(): boolean {
+  public wrongAnswer(nb_round: number): boolean {
     if (!this.players[this.currentPlayer].joker_is_use_now) {
-      this._console.WriteLine('Question was incorrectly answered');
+      this._console.WriteLine("[round " + nb_round + "] " + "Question was incorrectly answered");
       this.chooseNextCategory();
-      this._console.WriteLine(this.players[this.currentPlayer].name + " has chosen the next category which is : " + this._currentCategoryChoosed);
-      this._console.WriteLine(this.players[this._currentPlayer].name + " was sent to the penalty box");
+      this._console.WriteLine("[round " + nb_round + "] " + this.players[this.currentPlayer].name + " has chosen the next category which is : " + this._currentCategoryChoosed);
+      this._console.WriteLine("[round " + nb_round + "] " + this.players[this._currentPlayer].name + " was sent to the penalty box");
       this._players[this._currentPlayer].inPenaltyBox = true;
-      this._console.WriteLine(`${this.players[this._currentPlayer].name} answer streak was reset to 0`);
+      this._console.WriteLine("[round " + nb_round + "] " + this.players[this._currentPlayer].name + " answer streak was reset to 0");
       this.players[this._currentPlayer].streak = 0
 
     } else {
@@ -247,26 +249,26 @@ export class Game {
     }
   }
 
-  public wasCorrectlyAnswered(): boolean {
+  public wasCorrectlyAnswered(nb_round: number): boolean {
     if (!this.players[this.currentPlayer].joker_is_use_now) {
       if (this.players[this.currentPlayer].inPenaltyBox) {
         this.currentPlayer += 1;
         if (this.currentPlayer == this.players.length) this.currentPlayer = 0;
         return true;
       } else {
-        this._console.WriteLine("Answer was corrent!!!!");
-      this.players[this._currentPlayer].streak += 1
-      this._console.WriteLine(`${this.players[this._currentPlayer].name} streak is now ${this.players[this._currentPlayer].streak}`);
-      this._players[this._currentPlayer].gold = Math.min(this.players[this._currentPlayer].streak + this._players[this._currentPlayer].gold, this._coinGoal);
+        this._console.WriteLine("[round " + nb_round + "] " + "Answer was corrent!!!!");
+        this.players[this._currentPlayer].streak += 1
+        this._console.WriteLine("[round " + nb_round + "] " + this.players[this._currentPlayer].name + " streak is now " + this.players[this._currentPlayer].streak);
+        this._players[this._currentPlayer].gold = Math.min(this.players[this._currentPlayer].streak + this._players[this._currentPlayer].gold, this._coinGoal);
 
-      this._console.WriteLine(
-        this._players[this._currentPlayer].name +
+        this._console.WriteLine(
+          "[round " + nb_round + "] " + this._players[this._currentPlayer].name +
           " now has " +
           this.players[this.currentPlayer].gold +
           " Gold Coins."
         );
 
-        var winner = this.didPlayerWin();
+        var winner = this.didPlayerWin(nb_round);
 
         this.currentPlayer += 1;
         if (this.currentPlayer == this.players.length) this.currentPlayer = 0;
