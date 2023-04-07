@@ -125,13 +125,13 @@ export class Game {
 
   private askQuestion(): void {
     if (this.currentCategory() == "Pop")
-      this._console.WriteLine(this.popQuestions.shift()!);
+      this._console.WriteLine(this.popQuestions.shift());
     if (this.currentCategory() == "Science")
-      this._console.WriteLine(this.scienceQuestions.shift()!);
+      this._console.WriteLine(this.scienceQuestions.shift());
     if (this.currentCategory() == "Sports")
-      this._console.WriteLine(this.sportsQuestions.shift()!);
+      this._console.WriteLine(this.sportsQuestions.shift());
     if (this.currentCategory() == "Rock")
-      this._console.WriteLine(this.rockOrTechnoQuestions.shift()!);
+      this._console.WriteLine(this.rockOrTechnoQuestions.shift());
   }
 
   private currentCategory(): string {
@@ -169,7 +169,7 @@ export class Game {
         this.players[this.currentPlayer].name + " leaves the game"
       );
       this.players.splice(this.currentPlayer, 1);
-      if (this.currentPlayer == this.players.length) this.currentPlayer = 0;
+      if (this.currentPlayer == this.players.length) this._currentPlayer = 0;
       return true;
     }
     return false;
