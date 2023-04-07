@@ -55,6 +55,6 @@ export class GameBuilder {
   // }
 
   build(): Game {
-    return new Game(this.console, this.players, this.technoQuestion, this.forceJoker);
+    return new Game(this.console, this.players, this.technoQuestion, this.forceJoker, this.neverUseJoker);
   }
 }
