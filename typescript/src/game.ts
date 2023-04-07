@@ -138,8 +138,16 @@ export class Game {
   }
 
   public didPlayerWin(): boolean {
-    if (this.players.length === 1) return true;
-    return !(this.players[this.currentPlayer].gold == 6);
+    if (
+      this.players.length === 1 ||
+      this.players[this.currentPlayer].gold == 6
+    ) {
+      this._console.WriteLine(
+        this.players[this.currentPlayer].name + " win the game"
+      );
+      return false;
+    }
+    return true;
   }
 
   public giveUp(): boolean {
