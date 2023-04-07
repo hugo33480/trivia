@@ -1,83 +1,95 @@
 export class Player {
-  private _name: string;
-  // private _joker: boolean;
-  private _gold: number;
+    private _name: string;
+    private _gold: number;
+    private _joker: boolean;
+    private _joker_is_use_now: boolean;
+    private _place: number
 
-  private _alwaysFalseAnswer: boolean;
-  private _alwaysGetOutOfPenaltyBox: boolean;
-  private _inPenaltyBox : boolean;
-  // private _joker_is_use_now: boolean;
-  private _giveUp: boolean;
-  constructor(name: string) {
-    this._name = name;
-    // this._joker = true;
-    // this._joker_is_use_now = false;
-    this._gold = 0;
-    this._giveUp = false;
-    this._alwaysFalseAnswer = false;
-  }
+    private _alwaysFalseAnswer: boolean;
+    private _alwaysGetOutOfPenaltyBox: boolean;
+    private _inPenaltyBox: boolean;
+    // private _joker_is_use_now: boolean;
+    private _giveUp: boolean;
 
-  get name(): string {
-    return this._name;
-  }
+    constructor(name: string) {
+        this._name = name;
+        this._place = 0;
+        this._joker = true;
+        this._joker_is_use_now = false;
+        this._gold = 0;
+        this._giveUp = false;
+        this._alwaysFalseAnswer = false;
+    }
 
-  get alwaysFalseAnswer(): boolean {
-    return this._alwaysFalseAnswer;
-  }
+    get name(): string {
+        return this._name;
+    }
 
-  set alwaysFalseAnswer(value: boolean) {
-    this._alwaysFalseAnswer = value;
-  }
+    get alwaysFalseAnswer(): boolean {
+        return this._alwaysFalseAnswer;
+    }
 
-  get alwaysGetOutOfPenaltyBox(): boolean {
-    return this._alwaysGetOutOfPenaltyBox;
-  }
+    set alwaysFalseAnswer(value: boolean) {
+        this._alwaysFalseAnswer = value;
+    }
 
-  set alwaysGetOutOfPenaltyBox(value: boolean) {
-    this._alwaysGetOutOfPenaltyBox = value;
-  }
+    get alwaysGetOutOfPenaltyBox(): boolean {
+        return this._alwaysGetOutOfPenaltyBox;
+    }
 
-  get inPenaltyBox(): boolean {
-    return this._inPenaltyBox;
-  }
+    set alwaysGetOutOfPenaltyBox(value: boolean) {
+        this._alwaysGetOutOfPenaltyBox = value;
+    }
 
-  set inPenaltyBox(value: boolean) {
-    this._inPenaltyBox = value;
-  }
+    get inPenaltyBox(): boolean {
+        return this._inPenaltyBox;
+    }
 
-  set name(value: string) {
-    this._name = value;
-  }
+    set inPenaltyBox(value: boolean) {
+        this._inPenaltyBox = value;
+    }
 
-  // get joker(): boolean {
-  //   return this._joker;
-  // }
-  //
-  // set joker(value: boolean) {
-  //   this._joker = value;
-  // }
+    set name(value: string) {
+        this._name = value;
+    }
 
-  get gold(): number {
-    return this._gold;
-  }
+    get place(): number {
+        return this._place;
+    }
 
-  set gold(value: number) {
-    this._gold = value;
-  }
+    set place(value: number) {
+        this._place = value;
+    }
 
-  get giveUp(): boolean {
-    return this._giveUp;
-  }
+    get gold(): number {
+        return this._gold;
+    }
 
-  set giveUp(value: boolean) {
-    this._giveUp = value;
-  }
+    set gold(value: number) {
+        this._gold = value;
+    }
 
-  // get joker_is_use_now(): boolean {
-  //   return this._joker_is_use_now;
-  // }
-  //
-  // set joker_is_use_now(value: boolean) {
-  //   this._joker_is_use_now = value;
-  // }
+    get giveUp(): boolean {
+        return this._giveUp;
+    }
+
+    set giveUp(value: boolean) {
+        this._giveUp = value;
+    }
+
+    get joker(): boolean {
+        return this._joker;
+    }
+
+    set joker(value: boolean) {
+        this._joker = value;
+    }
+
+    get joker_is_use_now(): boolean {
+        return this._joker_is_use_now;
+    }
+
+    set joker_is_use_now(value: boolean) {
+        this._joker_is_use_now = value;
+    }
 }
