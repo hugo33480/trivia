@@ -44,10 +44,10 @@ export class GameBuilder {
     return this;
   }
 
-  // withCoinGoal(coinGoal: number): GameBuilder {
-  //   this.coinGoal = coinGoal;
-  //   return this;
-  // }
+  withCoinGoal(coinGoal: number): GameBuilder {
+    this.coinGoal = coinGoal;
+    return this;
+  }
 
   // withTechnoQuestions() {
   //   this.technoQuestion = true;
@@ -55,6 +55,6 @@ export class GameBuilder {
   // }
 
   build(): Game {
-    return new Game(this.console, this.players, this.technoQuestion, this.forceJoker);
+    return new Game(this.console, this.players, this.technoQuestion, this.forceJoker, this.coinGoal);
   }
 }

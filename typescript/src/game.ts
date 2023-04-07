@@ -12,6 +12,7 @@ export class Game {
   private sportsQuestions: Array<string> = [];
   private rockOrTechnoQuestions: Array<string> = [];
   private _console: IConsole;
+  private _coinGoal: number;
 
   get console(): IConsole {
     return this._console;
@@ -30,9 +31,10 @@ export class Game {
     this._currentPlayer = value;
   }
 
-  constructor(console: IConsole, players: Array<Player>, techno: boolean, forceJoker: boolean) {
+  constructor(console: IConsole, players: Array<Player>, techno: boolean, forceJoker: boolean, coinGoal: number) {
     this._console = console;
     this._forceJoker = forceJoker;
+    this._coinGoal = coinGoal;
     for (const player of players) {
       this.add(player);
     }
@@ -67,7 +69,18 @@ export class Game {
   }
 
   public isNumberOfPlayerValid() {
-    return this.howManyPlayers() >= 2 && this.howManyPlayers() <= 6;
+    if (this.howManyPlayers() >= 2 && this.howManyPlayers() <= 6) return true
+    this._console.WriteLine(
+        "The game should contain 2 players minimum and 6 players maximum"
+    );
+    return false;  }
+
+  public isCoinGoalValid() {
+    if (this._coinGoal > 5) return true;
+    this._console.WriteLine(
+        "The coin goal must be 6 or higher"
+    );
+    return false;
   }
 
   public roll(roll: number) {
@@ -164,10 +177,10 @@ export class Game {
   public didPlayerWin(): boolean {
     if (
       this.players.length === 1 ||
-      this.players[this.currentPlayer].gold == 6
+      this.players[this.currentPlayer].gold == this._coinGoal
     ) {
       this._console.WriteLine(
-        this.players[this.currentPlayer].name + " win the game"
+        this.players[this.currentPlayer].name + " wins the game"
       );
       return false;
     }
