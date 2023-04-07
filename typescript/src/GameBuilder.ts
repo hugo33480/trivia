@@ -12,6 +12,7 @@ export class GameBuilder {
   private console: IConsole = new SystemConsole();
   private coinGoal: number = 6;
   private forceJoker: boolean = false;
+  private neverUseJoker: boolean = false;
   private technoQuestion: boolean = false;
 
   withTechnoQuestions() {
@@ -46,6 +47,11 @@ export class GameBuilder {
 
   withForceJoker(): GameBuilder {
     this.forceJoker = true;
+    return this;
+  }
+
+  withNeverUseJoker(): GameBuilder {
+    this.neverUseJoker = true;
     return this;
   }
 

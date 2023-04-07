@@ -4,6 +4,7 @@ import {IConsole} from "./IConsole";
 export class Game {
   private _players: Array<Player> = [];
   private _forceJoker: boolean = false;
+  private _neverUseJoker: boolean = false;
   private purses: Array<number> = [];
   private _currentPlayer: number = 0;
   private _currentCategoryChoosed: string = "";
@@ -30,10 +31,11 @@ export class Game {
     this._currentPlayer = value;
   }
 
-  constructor(console: IConsole, players: Array<Player>, techno: boolean, forceJoker: boolean, coinGoal: number) {
+  constructor(console: IConsole, players: Array<Player>, techno: boolean, forceJoker: boolean, neverUseJoker: boolean, coinGoal: number) {
     this._console = console;
     this._forceJoker = forceJoker;
     this._coinGoal = coinGoal;
+    this._neverUseJoker = neverUseJoker;
     for (const player of players) {
       this.add(player);
     }
@@ -158,6 +160,7 @@ export class Game {
       this._console.WriteLine(this.sportsQuestions.shift()!);
     if (this.currentCategory() == "Rock")
       this._console.WriteLine(this.rockOrTechnoQuestions.shift()!);
+    this._currentCategoryChoosed = ""
   }
 
   private currentCategory(): string {
