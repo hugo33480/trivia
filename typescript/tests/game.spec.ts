@@ -7,7 +7,18 @@ describe("The test environment", () => {
   it("should test techno question", function () {
     const console = new ConsoleSpy();
     GameRunner.main(
-      new GameBuilder().withTechnoQuestions().withCustomConsole(console).build()
+        new GameBuilder()
+            .withPlayers([
+              new Player("Rémi"),
+              new Player("Théo"),
+              new Player("Nicolas"),
+              new Player("Florian"),
+              new Player("Gauthier"),
+              new Player("Hugo")
+            ])
+            .withTechnoQuestions()
+            .withCustomConsole(console)
+            .build()
     );
     expect(console.Content).toContain("Techno Question");
     expect(console.Content).not.toContain("Rock Question");
@@ -88,14 +99,15 @@ describe("The test environment", () => {
         .build()
     );
     expect(console.Content).toContain("Hugo leaves the game");
-    expect(console.Content).toContain("Nicolas win the game");
+    expect(console.Content).toContain("Nicolas wins the game");
   });
+
 
   it("should a player can use a joker if he has one left", function () {
     const console = new ConsoleSpy();
     GameRunner.main(new GameBuilder().withCustomConsole(console).withForceJoker().build());
     expect(console.Content).toContain("uses a joker");
-  })
+  });
 
   it("should a player cannot use a joker", function () {
     const console = new ConsoleSpy();
@@ -114,5 +126,34 @@ describe("The test environment", () => {
     const console = new ConsoleSpy();
     GameRunner.main(new GameBuilder().withPlayers([new Player('Rémi'), new Player("blbal")]).withFirstPlayerWithOnlyFalseAnswer().withNeverUseJoker().withCustomConsole(console).build());
     expect(console.Content).toContain("has chosen the next category");
+  });
+  });
+
+  it("should increment streak", function () {
+    const console = new ConsoleSpy();
+    GameRunner.main(new GameBuilder().withPlayers([new Player('Rémi'), new Player("Théo")]).withFirstPlayerWithOnlyTrueAnswer().withCustomConsole(console).build());
+    expect(console.Content).toContain("Your streak is now 2");
+    expect(console.Content).toContain("Your streak is now 3");
+    expect(console.Content).toContain("Rémi now has 3 Gold Coins.");
+    expect(console.Content).toContain("Rémi now has 6 Gold Coins.");
+  });
+
+  it("should reset streak", function () {
+    const console = new ConsoleSpy();
+    GameRunner.main(new GameBuilder().withPlayers([new Player('Rémi'), new Player("Théo")]).withFirstPlayerWithOnlyFalseAnswer().withFirstPlayerAlwaysGettingOut().withCustomConsole(console).build());
+    expect(console.Content).toContain("Your answer streak was reset to 0");
+  });
+
+  it("should set coin goal to 7", function () {
+      const console = new ConsoleSpy();
+      GameRunner.main(new GameBuilder().withCoinGoal(7).withCustomConsole(console).build());
+      expect(console.Content).toContain("now has 7 Gold Coins.");
+      expect(console.Content).toContain("wins the game");
+  });
+
+  it("should set coin goal to 5 then game not start", function () {
+      const console = new ConsoleSpy();
+      GameRunner.main(new GameBuilder().withCoinGoal(5).withCustomConsole(console).build());
+      expect(console.Content).toContain("The coin goal must be 6 or higher");
   });
 });

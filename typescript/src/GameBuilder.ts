@@ -29,6 +29,11 @@ export class GameBuilder {
     return this
   }
 
+  withFirstPlayerWithOnlyTrueAnswer(): GameBuilder {
+    this.players[0].alwaysTrueAnswer = true;
+    return this
+  }
+
   withFirstPlayerAlwaysGettingOut(): GameBuilder {
     this.players[0].alwaysGetOutOfPenaltyBox = true;
     return this
@@ -44,10 +49,10 @@ export class GameBuilder {
     return this;
   }
 
-  // withCoinGoal(coinGoal: number): GameBuilder {
-  //   this.coinGoal = coinGoal;
-  //   return this;
-  // }
+  withCoinGoal(coinGoal: number): GameBuilder {
+    this.coinGoal = coinGoal;
+    return this;
+  }
 
   // withTechnoQuestions() {
   //   this.technoQuestion = true;
@@ -55,6 +60,6 @@ export class GameBuilder {
   // }
 
   build(): Game {
-    return new Game(this.console, this.players, this.technoQuestion, this.forceJoker, this.neverUseJoker);
+    return new Game(this.console, this.players, this.technoQuestion, this.forceJoker, this.neverUseJoker,  this.coinGoal);
   }
 }

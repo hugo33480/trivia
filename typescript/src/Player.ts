@@ -1,4 +1,11 @@
 export class Player {
+  get alwaysTrueAnswer(): boolean {
+    return this._alwaysTrueAnswer;
+  }
+
+  set alwaysTrueAnswer(value: boolean) {
+    this._alwaysTrueAnswer = value;
+  }
   private _name: string;
   private _gold: number;
   private _joker: boolean;
@@ -10,6 +17,8 @@ export class Player {
   private _inPenaltyBox: boolean;
   // private _joker_is_use_now: boolean;
   private _giveUp: boolean;
+  private _streak: number = 0
+  private _alwaysTrueAnswer : boolean;
 
   constructor(name: string) {
     this._name = name;
@@ -19,6 +28,14 @@ export class Player {
     this._gold = 0;
     this._giveUp = false;
     this._alwaysFalseAnswer = false;
+  }
+
+  get streak(): number {
+    return this._streak;
+  }
+
+  set streak(value: number) {
+    this._streak = value;
   }
 
   get name(): string {

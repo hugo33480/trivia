@@ -12,6 +12,7 @@ export class Game {
   private sportsQuestions: Array<string> = [];
   private rockOrTechnoQuestions: Array<string> = [];
   private _console: IConsole;
+  private _coinGoal: number;
 
   get console(): IConsole {
     return this._console;
@@ -29,9 +30,10 @@ export class Game {
     this._currentPlayer = value;
   }
 
-  constructor(console: IConsole, players: Array<Player>, techno: boolean, forceJoker: boolean) {
+  constructor(console: IConsole, players: Array<Player>, techno: boolean, forceJoker: boolean, coinGoal: number) {
     this._console = console;
     this._forceJoker = forceJoker;
+    this._coinGoal = coinGoal;
     for (const player of players) {
       this.add(player);
     }
@@ -66,7 +68,18 @@ export class Game {
   }
 
   public isNumberOfPlayerValid() {
-    return this.howManyPlayers() >= 2 && this.howManyPlayers() <= 6;
+    if (this.howManyPlayers() >= 2 && this.howManyPlayers() <= 6) return true
+    this._console.WriteLine(
+        "The game should contain 2 players minimum and 6 players maximum"
+    );
+    return false;  }
+
+  public isCoinGoalValid() {
+    if (this._coinGoal > 5) return true;
+    this._console.WriteLine(
+        "The coin goal must be 6 or higher"
+    );
+    return false;
   }
 
   public roll(roll: number) {
@@ -167,10 +180,10 @@ export class Game {
   public didPlayerWin(): boolean {
     if (
       this.players.length === 1 ||
-      this.players[this.currentPlayer].gold == 6
+      this.players[this.currentPlayer].gold >= this._coinGoal
     ) {
       this._console.WriteLine(
-        this.players[this.currentPlayer].name + " win the game"
+        this.players[this.currentPlayer].name + " wins the game"
       );
       return false;
     }
@@ -197,8 +210,10 @@ export class Game {
       this._console.WriteLine('Question was incorrectly answered');
       this.chooseNextCategory();
       this._console.WriteLine(this.players[this.currentPlayer].name + " has chosen the next category which is : " + this._currentCategoryChoosed);
-      this._console.WriteLine(this.players[this.currentPlayer].name + " was sent to the penalty box");
-      this.players[this.currentPlayer].inPenaltyBox = true;
+      this._console.WriteLine(this.players[this._currentPlayer].name + " was sent to the penalty box");
+      this._players[this._currentPlayer].inPenaltyBox = true;
+      this._console.WriteLine("Your answer streak was reset to 0");
+      this.players[this._currentPlayer].streak = 0
 
     } else {
       this.players[this.currentPlayer].joker_is_use_now = false;
@@ -236,10 +251,11 @@ export class Game {
         return true;
       } else {
         this._console.WriteLine("Answer was corrent!!!!");
-
-        this.players[this.currentPlayer].gold += 1;
-        this._console.WriteLine(
-          this.players[this.currentPlayer].name +
+      this.players[this._currentPlayer].streak += 1
+      this._console.WriteLine(`Your streak is now ${this.players[this._currentPlayer].streak}`);
+      this._players[this._currentPlayer].gold += this.players[this._currentPlayer].streak;
+      this._console.WriteLine(
+        this._players[this._currentPlayer].name +
           " now has " +
           this.players[this.currentPlayer].gold +
           " Gold Coins."
