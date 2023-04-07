@@ -212,7 +212,7 @@ export class Game {
       this._console.WriteLine(this.players[this.currentPlayer].name + " has chosen the next category which is : " + this._currentCategoryChoosed);
       this._console.WriteLine(this.players[this._currentPlayer].name + " was sent to the penalty box");
       this._players[this._currentPlayer].inPenaltyBox = true;
-      this._console.WriteLine("Your answer streak was reset to 0");
+      this._console.WriteLine(`${this.players[this._currentPlayer].name} answer streak was reset to 0`);
       this.players[this._currentPlayer].streak = 0
 
     } else {
@@ -252,7 +252,7 @@ export class Game {
       } else {
         this._console.WriteLine("Answer was corrent!!!!");
       this.players[this._currentPlayer].streak += 1
-      this._console.WriteLine(`Your streak is now ${this.players[this._currentPlayer].streak}`);
+      this._console.WriteLine(`${this.players[this._currentPlayer].name} streak is now ${this.players[this._currentPlayer].streak}`);
       this._players[this._currentPlayer].gold = Math.min(this.players[this._currentPlayer].streak + this._players[this._currentPlayer].gold, this._coinGoal);
 
       this._console.WriteLine(
