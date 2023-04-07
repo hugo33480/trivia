@@ -119,8 +119,8 @@ describe("The test environment", () => {
   it("should increment streak", function () {
     const console = new ConsoleSpy();
     GameRunner.main(new GameBuilder().withPlayers([new Player('Rémi'), new Player("Théo")]).withFirstPlayerWithOnlyTrueAnswer().withCustomConsole(console).build());
-    expect(console.Content).toContain("Your streak is now 2");
-    expect(console.Content).toContain("Your streak is now 3");
+    expect(console.Content).toContain("Rémi streak is now 2");
+    expect(console.Content).toContain("Rémi streak is now 3");
     expect(console.Content).toContain("Rémi now has 3 Gold Coins.");
     expect(console.Content).toContain("Rémi now has 6 Gold Coins.");
   });
@@ -128,7 +128,7 @@ describe("The test environment", () => {
   it("should reset streak", function () {
     const console = new ConsoleSpy();
     GameRunner.main(new GameBuilder().withPlayers([new Player('Rémi'), new Player("Théo")]).withFirstPlayerWithOnlyFalseAnswer().withFirstPlayerAlwaysGettingOut().withCustomConsole(console).build());
-    expect(console.Content).toContain("Your answer streak was reset to 0");
+    expect(console.Content).toContain("Rémi answer streak was reset to 0");
   });
 
   it("should set coin goal to 7", function () {
