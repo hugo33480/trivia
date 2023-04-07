@@ -29,6 +29,11 @@ export class GameBuilder {
     return this
   }
 
+  withFirstPlayerWithOnlyTrueAnswer(): GameBuilder {
+    this.players[0].alwaysTrueAnswer = true;
+    return this
+  }
+
   withFirstPlayerAlwaysGettingOut(): GameBuilder {
     this.players[0].alwaysGetOutOfPenaltyBox = true;
     return this

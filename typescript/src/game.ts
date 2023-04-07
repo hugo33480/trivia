@@ -192,8 +192,10 @@ export class Game {
   public wrongAnswer(): boolean {
     if (!this.players[this.currentPlayer].joker_is_use_now) {
       this._console.WriteLine('Question was incorrectly answered');
-      this._console.WriteLine(this.players[this.currentPlayer].name + " was sent to the penalty box");
-      this.players[this.currentPlayer].inPenaltyBox = true;
+      this._console.WriteLine(this.players[this._currentPlayer].name + " was sent to the penalty box");
+      this._players[this._currentPlayer].inPenaltyBox = true;
+      this._console.WriteLine("Your answer streak was reset to 0");
+      this.players[this._currentPlayer].streak = 0
 
     } else {
       this.players[this.currentPlayer].joker_is_use_now = false;
@@ -213,10 +215,11 @@ export class Game {
         return true;
       } else {
         this._console.WriteLine("Answer was corrent!!!!");
-
-        this.players[this.currentPlayer].gold += 1;
-        this._console.WriteLine(
-          this.players[this.currentPlayer].name +
+      this.players[this._currentPlayer].streak += 1
+      this._console.WriteLine(`Your streak is now ${this.players[this._currentPlayer].streak}`);
+      this._players[this._currentPlayer].gold += this.players[this._currentPlayer].streak;
+      this._console.WriteLine(
+        this._players[this._currentPlayer].name +
           " now has " +
           this.players[this.currentPlayer].gold +
           " Gold Coins."

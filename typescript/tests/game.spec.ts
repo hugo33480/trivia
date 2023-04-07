@@ -91,16 +91,33 @@ describe("The test environment", () => {
     expect(console.Content).toContain("Nicolas win the game");
   });
 
+
   it("should a player can use a joker if he has one left", function () {
     const console = new ConsoleSpy();
     GameRunner.main(new GameBuilder().withCustomConsole(console).withForceJoker().build());
     expect(console.Content).toContain("uses a joker");
-  })
+  });
 
   it("should not earn a gold when player uses a joker", function () {
     const console = new ConsoleSpy();
     GameRunner.main(new GameBuilder().withCustomConsole(console).withForceJoker().build());
     expect(console.Content).toContain("uses a joker");
     expect(console.Content).toContain("doesn't earn gold this turn");
-  })
+  });
+
+  it("should increment streak", function () {
+    const console = new ConsoleSpy();
+    GameRunner.main(new GameBuilder().withPlayers([new Player('Rémi'), new Player("Théo")]).withFirstPlayerWithOnlyTrueAnswer().withCustomConsole(console).build());
+    expect(console.Content).toContain("Your streak is now 2");
+    expect(console.Content).toContain("Your streak is now 3");
+    expect(console.Content).toContain("Rémi now has 3 Gold Coins.");
+    expect(console.Content).toContain("Rémi now has 6 Gold Coins.");
+  });
+
+  it("should reset streak", function () {
+    const console = new ConsoleSpy();
+    GameRunner.main(new GameBuilder().withPlayers([new Player('Rémi'), new Player("Théo")]).withFirstPlayerWithOnlyFalseAnswer().withFirstPlayerAlwaysGettingOut().withCustomConsole(console).build());
+    expect(console.Content).toContain("Your answer streak was reset to 0");
+  });
+
 });
