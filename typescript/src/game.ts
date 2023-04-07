@@ -90,6 +90,11 @@ export class Game {
     return false;
   }
 
+  public nextPlayer(){
+    this.currentPlayer += 1;
+    if (this.currentPlayer == this.players.length) this.currentPlayer = 0;
+  }
+
   public roll(roll: number) {
     if (this.players[this.currentPlayer].alwaysGetOutOfPenaltyBox) {
       roll = 3;
@@ -258,8 +263,7 @@ export class Game {
       this.players[this.currentPlayer].joker_is_use_now = false;
     }
 
-    this.currentPlayer += 1;
-    if (this.currentPlayer == this.players.length) this.currentPlayer = 0;
+    this.nextPlayer();
     return true;
   }
 
@@ -284,8 +288,7 @@ export class Game {
   public wasCorrectlyAnswered(): boolean {
     if (!this.players[this.currentPlayer].joker_is_use_now) {
       if (this.players[this.currentPlayer].inPenaltyBox) {
-        this.currentPlayer += 1;
-        if (this.currentPlayer == this.players.length) this.currentPlayer = 0;
+        this.nextPlayer();
         return true;
       } else {
         this._console.WriteLine("Answer was corrent!!!!");
@@ -310,15 +313,13 @@ export class Game {
 
         var winner = this.didPlayerWin();
 
-        this.currentPlayer += 1;
-        if (this.currentPlayer == this.players.length) this.currentPlayer = 0;
+        this.nextPlayer();
 
         return winner;
       }
     } else {
       this.players[this.currentPlayer].joker_is_use_now = false;
-      this.currentPlayer += 1;
-      if (this.currentPlayer == this.players.length) this.currentPlayer = 0;
+      this.nextPlayer();
       return true;
     }
   }

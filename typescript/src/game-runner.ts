@@ -1,6 +1,6 @@
-import {Game} from "./game";
-import {GameBuilder} from "./GameBuilder";
-import {Player} from "./Player";
+import { Game } from "./game";
+import { GameBuilder } from "./GameBuilder";
+import { Player } from "./Player";
 
 export class GameRunner {
   public static main(game: Game): void {
@@ -10,7 +10,14 @@ export class GameRunner {
         game.roll(Math.floor(Math.random() * 6) + 1);
         if (game.giveUp()) {
           notAWinner = game.didPlayerWin();
-        } else if (!game.players[game.currentPlayer].alwaysTrueAnswer && Math.floor(Math.random() * 10) == 7 || game.players[game.currentPlayer].alwaysFalseAnswer) {
+        } else if (game.players[game.currentPlayer].inPenaltyBox) {
+          game.nextPlayer();
+          notAWinner = true;
+        } else if (
+          (!game.players[game.currentPlayer].alwaysTrueAnswer &&
+            Math.floor(Math.random() * 10) == 7) ||
+          game.players[game.currentPlayer].alwaysFalseAnswer
+        ) {
           notAWinner = game.wrongAnswer();
         } else {
           notAWinner = game.wasCorrectlyAnswered();
