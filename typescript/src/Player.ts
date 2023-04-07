@@ -19,6 +19,7 @@ export class Player {
   private _giveUp: boolean;
   private _streak: number = 0
   private _alwaysTrueAnswer : boolean;
+  private _visiteInJail: number = 0;
 
   constructor(name: string) {
     this._name = name;
@@ -108,5 +109,13 @@ export class Player {
 
   set joker_is_use_now(value: boolean) {
     this._joker_is_use_now = value;
+  }
+
+  get visitInJail(): number {
+    return this._visiteInJail;
+  }
+
+  public goToJail() {
+    this._visiteInJail++
   }
 }
