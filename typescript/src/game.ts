@@ -84,14 +84,14 @@ export class Game {
     return false;
   }
 
-  public roll(roll: number) {
+  public roll(roll: number, nb_round: number) {
 
     if (this.players[this.currentPlayer].alwaysGetOutOfPenaltyBox) {
       roll = 3
     }
 
     this._console.WriteLine(" ");
-    this._console.WriteLine("---------- New game round ----------");
+    this._console.WriteLine("---------- New game round  ----------");
     this._console.WriteLine(
       "It's round : " + nb_round +" => " + this.players[this.currentPlayer].name + " is the current player. Has " + this.players[this.currentPlayer].gold + " gold"
     );

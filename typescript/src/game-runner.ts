@@ -5,9 +5,11 @@ import {Player} from "./Player";
 export class GameRunner {
   public static main(game: Game): void {
     let notAWinner;
+    let nb_round = 1;
     if (game.isNumberOfPlayerValid() && game.isCoinGoalValid()) {
       do {
-        game.roll(Math.floor(Math.random() * 6) + 1);
+        game.roll(Math.floor(Math.random() * 6) + 1, nb_round);
+        nb_round += 1
         if (game.giveUp()) {
           notAWinner = game.didPlayerWin();
         } else if (!game.players[game.currentPlayer].alwaysTrueAnswer && Math.floor(Math.random() * 10) == 7 || game.players[game.currentPlayer].alwaysFalseAnswer) {
