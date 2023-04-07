@@ -28,13 +28,15 @@ export class Game {
       this.popQuestions.push("Pop Question " + i);
       this.scienceQuestions.push("Science Question " + i);
       this.sportsQuestions.push("Sports Question " + i);
-        this.rockOrTechnoQuestions.push(this.createRockOrTechnoQuestion(i, techno));
+      this.rockOrTechnoQuestions.push(
+        this.createRockOrTechnoQuestion(i, techno)
+      );
     }
   }
 
-    private createRockOrTechnoQuestion(index: number, techno: boolean): string {
-        return(techno ?  "Techno Question " : "Rock Question ") + index ;
-    }
+  private createRockOrTechnoQuestion(index: number, techno: boolean): string {
+    return (techno ? "Techno Question " : "Rock Question ") + index;
+  }
 
   public add(player: Player): boolean {
     this.players.push(player);
@@ -119,7 +121,7 @@ export class Game {
     if (this.currentCategory() == "Sports")
       this._console.WriteLine(this.sportsQuestions.shift()!);
     if (this.currentCategory() == "Rock")
-        this._console.WriteLine(this.rockOrTechnoQuestions.shift());
+      this._console.WriteLine(this.rockOrTechnoQuestions.shift()!);
   }
 
   private currentCategory(): string {
@@ -135,8 +137,24 @@ export class Game {
     return "Rock";
   }
 
-  private didPlayerWin(): boolean {
+  public didPlayerWin(): boolean {
+    if (this.players.length === 1) return true;
     return !(this.players[this.currentPlayer].gold == 6);
+  }
+
+  public giveUp(): boolean {
+    if (
+      Math.floor(Math.random() * 6) == 6 ||
+      this.players[this.currentPlayer].giveUp
+    ) {
+      this._console.WriteLine(
+        this.players[this.currentPlayer].name + " leaves the game"
+      );
+      this.players.splice(this.currentPlayer, 1);
+      if (this.currentPlayer == this.players.length) this.currentPlayer = 0;
+      return true;
+    }
+    return false;
   }
 
   public wrongAnswer(): boolean {
