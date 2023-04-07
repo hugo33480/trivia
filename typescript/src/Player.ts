@@ -7,11 +7,13 @@ export class Player {
   private _alwaysGetOutOfPenaltyBox: boolean;
   private _inPenaltyBox : boolean;
   // private _joker_is_use_now: boolean;
+  private _giveUp: boolean;
   constructor(name: string) {
     this._name = name;
     // this._joker = true;
     // this._joker_is_use_now = false;
     this._gold = 0;
+    this._giveUp = false;
     this._alwaysFalseAnswer = false;
   }
 
@@ -61,6 +63,14 @@ export class Player {
 
   set gold(value: number) {
     this._gold = value;
+  }
+
+  get giveUp(): boolean {
+    return this._giveUp;
+  }
+
+  set giveUp(value: boolean) {
+    this._giveUp = value;
   }
 
   // get joker_is_use_now(): boolean {
