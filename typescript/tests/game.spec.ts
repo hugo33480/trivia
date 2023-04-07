@@ -156,4 +156,27 @@ describe("The test environment", () => {
       GameRunner.main(new GameBuilder().withCoinGoal(5).withCustomConsole(console).build());
       expect(console.Content).toContain("The coin goal must be 6 or higher");
   });
+
+  it("test stats", function () {
+    let res : {[key:string]: number}  = {
+      "Pop":0,
+      "Sports":0,
+      "Rock":0,
+      "Science":0
+    }
+    const console = new ConsoleSpy();
+    for(let i = 0; i < 100; i++){
+      GameRunner.main(new GameBuilder().withCustomConsole(console).build());
+      res.Pop += (console.Content.match(/The category is Pop/g) || []).length
+      res.Rock += (console.Content.match(/The category is Rock/g) || []).length
+      res.Science += (console.Content.match(/The category is Science/g) || []).length
+      res.Sports += (console.Content.match(/The category is Sports/g) || []).length
+    }
+    let expectedResults = (res.Pop + res.Science + res.Sports + res.Rock) / 4
+    expect(res.Pop).toBeCloseTo(expectedResults, -4);
+    expect(res.Rock).toBeCloseTo(expectedResults, -4);
+    expect(res.Science).toBeCloseTo(expectedResults, -4);
+    expect(res.Sports).toBeCloseTo(expectedResults, -4);
+  });
+
 });
