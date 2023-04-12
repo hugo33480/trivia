@@ -7,6 +7,8 @@ export class Game {
   private purses: Array<number> = [];
   private _currentPlayer: number = 0;
 
+  private _nbQuestions: number = 1;
+
   private popQuestions: Array<string> = [];
   private scienceQuestions: Array<string> = [];
   private sportsQuestions: Array<string> = [];
@@ -31,14 +33,15 @@ export class Game {
     this._currentPlayer = value;
   }
 
-  constructor(console: IConsole, players: Array<Player>, techno: boolean, forceJoker: boolean, coinGoal: number) {
+  constructor(console: IConsole, players: Array<Player>, techno: boolean, forceJoker: boolean, coinGoal: number, nbQuestions: number) {
     this._console = console;
     this._forceJoker = forceJoker;
     this._coinGoal = coinGoal;
+    this._nbQuestions = nbQuestions;
     for (const player of players) {
       this.add(player);
     }
-    for (let i = 0; i < 1; i++) {
+    for (let i = 0; i < this._nbQuestions; i++) {
       this.popQuestions.push("Pop Question " + i);
       this.scienceQuestions.push("Science Question " + i);
       this.sportsQuestions.push("Sports Question " + i);
