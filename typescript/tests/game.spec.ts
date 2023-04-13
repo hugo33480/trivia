@@ -179,11 +179,9 @@ describe("The test environment", () => {
 
   it("should the player go to jail each turn and have less chance to get out each time", function () {
     const console = new ConsoleSpy();
-    GameRunner.main(new GameBuilder().withPlayers([new Player('Rémi'), new Player("blbal")]).withFirstPlayerWithOnlyFalseAnswer().withNeverUseJoker().withCustomConsole(console).withCoinGoal(15).build());
-    expect(console.Content.match(/Rémi's visit to jail : 1, he has now 1 chance on 1 to get out next turn/g).length).toBe(1)
-    expect(console.Content).toContain("Rémi is getting out of the penalty box");
-    expect(console.Content.match(/Rémi's visit to jail : 2, he has now 1 chance on 2 to get out next turn/g).length).toBe(1)
-
+    GameRunner.main(new GameBuilder().withPlayers([new Player('Rémi'), new Player("blbal")]).withFirstPlayerAlwaysInJail().withFirstPlayerWithOnlyFalseAnswer().withNeverUseJoker().withCustomConsole(console).withCoinGoal(15).build());
+    expect(console.Content).toContain("Rémi is not getting out of the penalty box, it's chance to get out are now 0.6 on 1");
+    expect(console.Content).toContain("Rémi is not getting out of the penalty box, it's chance to get out are now 0.7 on 1");
   });
   it("test stats", function () {
     let res : {[key:string]: number}  = {
