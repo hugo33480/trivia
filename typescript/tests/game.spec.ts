@@ -124,12 +124,20 @@ describe("The test environment", () => {
     expect(console.Content).toContain("Pat doesn't earn gold this turn. He has 0 gold");
   })
 
-  it("should the player who goes to jail chooses the following category", function () {
+  it("if the player who goes to jail chooses the following category which will be : Sports", function () {
     const console = new ConsoleSpy();
     GameRunner.main(new GameBuilder().withPlayers([new Player('Rémi'), new Player("Constantin")]).withFirstPlayerWithOnlyFalseAnswer().withNeverUseJoker().withNextCategoryIsSport().withCustomConsole(console).build());
     expect(console.Content).toContain("[round 1] Rémi has chosen the next category which is : Sports");
     expect(console.Content).toContain("[round 1] Constantin is the current player.");
     expect(console.Content).toContain("[round 1] Sports Question");
+  });
+
+  it("if the player who goes to jail chooses the following category which will be : Science", function () {
+    const console = new ConsoleSpy();
+    GameRunner.main(new GameBuilder().withPlayers([new Player('Rémi'), new Player("Constantin")]).withFirstPlayerWithOnlyFalseAnswer().withNeverUseJoker().withNextCategoryIsScience().withCustomConsole(console).build());
+    expect(console.Content).toContain("[round 1] Rémi has chosen the next category which is : Science");
+    expect(console.Content).toContain("[round 1] Constantin is the current player.");
+    expect(console.Content).toContain("[round 1] Science Question");
   });
 
   it("should increment streak", function () {
@@ -184,6 +192,7 @@ describe("The test environment", () => {
     expect(console.Content).toContain("Rémi is not getting out of the penalty box, it's chance to get out are now 0.6 on 1");
     expect(console.Content).toContain("Rémi is not getting out of the penalty box, it's chance to get out are now 0.7 on 1");
   });
+
   it("test stats", function () {
     let res : {[key:string]: number}  = {
       "Pop":0,

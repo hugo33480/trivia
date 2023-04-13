@@ -15,6 +15,7 @@ export class Game {
   private _console: IConsole;
   private _coinGoal: number;
   private _nextCategoryIsSport: boolean;
+  private _nextCategoryIsScience: boolean;
 
   get console(): IConsole {
     return this._console;
@@ -38,8 +39,9 @@ export class Game {
     techno: boolean,
     forceJoker: boolean,
     neverUseJoker: boolean,
-    coinGoal: number
-  , nextCategoryIsSport: boolean,
+    coinGoal: number,
+    nextCategoryIsSport: boolean,
+    nextCategoryIsScience: boolean,
     nbQuestions: number) {
     this._console = console;
     this._forceJoker = forceJoker;
@@ -47,6 +49,7 @@ export class Game {
     this._nbQuestions = nbQuestions;
     this._neverUseJoker = neverUseJoker;
     this._nextCategoryIsSport = nextCategoryIsSport;
+    this._nextCategoryIsScience = nextCategoryIsScience;
     for (const player of players) {
       this.add(player);
     }
@@ -262,6 +265,11 @@ export class Game {
       this._currentCategoryChoosed = "Sports";
       return;
     }
+    if (this._nextCategoryIsScience) {
+      this._currentCategoryChoosed = "Science";
+      return;
+    }
+
     const randomRoll = Math.floor(Math.random() * 4);
     switch (randomRoll) {
       case 0:

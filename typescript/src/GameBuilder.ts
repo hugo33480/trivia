@@ -14,6 +14,7 @@ export class GameBuilder {
   private forceJoker: boolean = false;
   private neverUseJoker: boolean = false;
   private nextCategoryIsSport: boolean = false;
+  private nextCategoryIsScience: boolean = false;
   private technoQuestion: boolean = false;
 
   private nbQuestions: number = 50;
@@ -68,6 +69,11 @@ export class GameBuilder {
     return this;
   }
 
+  withNextCategoryIsScience(): GameBuilder {
+    this.nextCategoryIsScience = true;
+    return this;
+  }
+
   withCoinGoal(coinGoal: number): GameBuilder {
     this.coinGoal = coinGoal;
     return this;
@@ -84,6 +90,6 @@ export class GameBuilder {
   // }
 
   build(): Game {
-    return new Game(this.console, this.players, this.technoQuestion, this.forceJoker, this.neverUseJoker, this.coinGoal, this.nextCategoryIsSport, this.nbQuestions);
+    return new Game(this.console, this.players, this.technoQuestion, this.forceJoker, this.neverUseJoker, this.coinGoal, this.nextCategoryIsSport, this.nextCategoryIsScience, this.nbQuestions);
   }
 }
