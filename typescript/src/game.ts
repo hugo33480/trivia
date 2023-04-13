@@ -1,5 +1,5 @@
-import {Player} from "./Player";
-import {IConsole} from "./IConsole";
+import { Player } from "./Player";
+import { IConsole } from "./IConsole";
 
 export class Game {
   private _players: Array<Player> = [];
@@ -32,7 +32,14 @@ export class Game {
     this._currentPlayer = value;
   }
 
-  constructor(console: IConsole, players: Array<Player>, techno: boolean, forceJoker: boolean, neverUseJoker: boolean, coinGoal: number, nextCategoryIsSport: boolean) {
+  constructor(
+    console: IConsole,
+    players: Array<Player>,
+    techno: boolean,
+    forceJoker: boolean,
+    neverUseJoker: boolean,
+    coinGoal: number
+  , nextCategoryIsSport: boolean) {
     this._console = console;
     this._forceJoker = forceJoker;
     this._coinGoal = coinGoal;
@@ -72,7 +79,7 @@ export class Game {
   }
 
   public isNumberOfPlayerValid() {
-    if (this.howManyPlayers() >= 2 && this.howManyPlayers() <= 6) return true
+    if (this.howManyPlayers() >= 2 && this.howManyPlayers() <= 6) return true;
     this._console.WriteLine(
       "The game should contain 2 players minimum and 6 players maximum"
     );
@@ -87,10 +94,14 @@ export class Game {
     return false;
   }
 
-  public roll(roll: number, nb_round: number) {
+  public nextPlayer(){
+    this.currentPlayer += 1;
+    if (this.currentPlayer == this.players.length) this.currentPlayer = 0;
+  }
 
+  public roll(roll: number, nb_round: number) {
     if (this.players[this.currentPlayer].alwaysGetOutOfPenaltyBox) {
-      roll = 3
+      roll = 3;
     }
 
     this._console.WriteLine(" ");
@@ -101,7 +112,11 @@ export class Game {
     this._console.WriteLine("[round " + nb_round + "] " + "They have rolled a " + roll);
 
     if (this.players[this.currentPlayer].inPenaltyBox) {
-      if (roll % 2 != 0) {
+      if (
+        Math.floor(
+          Math.random() * this.players[this.currentPlayer].visitInJail + 1
+        ) == 1
+      ) {
         this.players[this.currentPlayer].inPenaltyBox = false;
         this._console.WriteLine(
           "[round " + nb_round + "] " + this.players[this.currentPlayer].name +
@@ -116,8 +131,8 @@ export class Game {
 
         this._console.WriteLine(
           "[round " + nb_round + "] " + this.players[this.currentPlayer].name +
-          "'s new location is " +
-          this.players[this.currentPlayer].place
+            "'s new location is " +
+            this.players[this.currentPlayer].place
         );
         this._console.WriteLine("[round " + nb_round + "] " + "The category is " + this.currentCategory());
         if (!this.useJoker(this.players[this.currentPlayer])) {
@@ -130,21 +145,23 @@ export class Game {
         this._console.WriteLine(
           "[round " + nb_round + "] " +
           this.players[this.currentPlayer].name +
-          " is not getting out of the penalty box"
+            " is not getting out of the penalty box"
         );
-        this.players[this.currentPlayer].inPenaltyBox = true
+        this.players[this.currentPlayer].inPenaltyBox = true;
       }
     } else {
-      this.players[this.currentPlayer].place = this.players[this.currentPlayer].place + roll;
+      this.players[this.currentPlayer].place =
+        this.players[this.currentPlayer].place + roll;
       if (this.players[this.currentPlayer].place > 11) {
-        this.players[this.currentPlayer].place = this.players[this.currentPlayer].place - 12;
+        this.players[this.currentPlayer].place =
+          this.players[this.currentPlayer].place - 12;
       }
 
       this._console.WriteLine(
         "[round " + nb_round + "] " +
         this.players[this.currentPlayer].name +
-        "'s new location is " +
-        this.players[this.currentPlayer].place
+          "'s new location is " +
+          this.players[this.currentPlayer].place
       );
       this._console.WriteLine("[round " + nb_round + "] " + "The category is " + this.currentCategory());
       if (!this.useJoker(this.players[this.currentPlayer])) {
@@ -165,7 +182,7 @@ export class Game {
       this._console.WriteLine("[round " + nb_round + "] " + this.sportsQuestions.shift()!);
     if (this.currentCategory() == "Rock")
       this._console.WriteLine("[round " + nb_round + "] " + this.rockOrTechnoQuestions.shift()!);
-    this._currentCategoryChoosed = ""
+    this._currentCategoryChoosed = "";
   }
 
   private currentCategory(): string {
@@ -181,7 +198,7 @@ export class Game {
       if (this.players[this.currentPlayer].place == 10) return "Sports";
       return "Rock";
     } else {
-      return this._currentCategoryChoosed
+      return this._currentCategoryChoosed;
     }
   }
 
@@ -217,19 +234,31 @@ export class Game {
     if (!this.players[this.currentPlayer].joker_is_use_now) {
       this._console.WriteLine("[round " + nb_round + "] " + "Question was incorrectly answered");
       this.chooseNextCategory();
-      this._console.WriteLine("[round " + nb_round + "] " + this.players[this.currentPlayer].name + " has chosen the next category which is : " + this._currentCategoryChoosed);
+      this._console.WriteLine(
+        "[round " + nb_round + "] " + this.players[this.currentPlayer].name + " has chosen the next category which is : " + this._currentCategoryChoosed);
       this._console.WriteLine("[round " + nb_round + "] " + this.players[this._currentPlayer].name + " was sent to the penalty box");
       this._players[this._currentPlayer].inPenaltyBox = true;
       this._console.WriteLine("[round " + nb_round + "] " + this.players[this._currentPlayer].name + " answer streak was reset to 0");
       this.players[this._currentPlayer].streak = 0
 
+      this.players[this.currentPlayer].goToJail();
+      this._console.WriteLine("[round " + nb_round + "] " +
+        this.players[this._currentPlayer].name +
+          "'s visit to jail : " +
+          this.players[this._currentPlayer].visitInJail +
+          ", he has now 1 chance on " +
+          this.players[this._currentPlayer].visitInJail +
+          " to get out next turn"
+      );
+      this._console.WriteLine(
+        `${this.players[this._currentPlayer].name} answer streak was reset to 0`
+      );
+      this.players[this._currentPlayer].streak = 0;
     } else {
       this.players[this.currentPlayer].joker_is_use_now = false;
     }
 
-    this.currentPlayer += 1;
-    if (this.currentPlayer == this.players.length)
-      this.currentPlayer = 0;
+    this.nextPlayer();
     return true;
   }
 
@@ -258,12 +287,11 @@ export class Game {
   public wasCorrectlyAnswered(nb_round: number): boolean {
     if (!this.players[this.currentPlayer].joker_is_use_now) {
       if (this.players[this.currentPlayer].inPenaltyBox) {
-        this.currentPlayer += 1;
-        if (this.currentPlayer == this.players.length) this.currentPlayer = 0;
+        this.nextPlayer();
         return true;
       } else {
         this._console.WriteLine("[round " + nb_round + "] " + "Answer was corrent!!!!");
-        this.players[this._currentPlayer].streak += 1
+        this.players[this._currentPlayer].streak += 1;
         this._console.WriteLine("[round " + nb_round + "] " + this.players[this._currentPlayer].name + " streak is now " + this.players[this._currentPlayer].streak);
         this._players[this._currentPlayer].gold = Math.min(this.players[this._currentPlayer].streak + this._players[this._currentPlayer].gold, this._coinGoal);
 
@@ -276,16 +304,13 @@ export class Game {
 
         var winner = this.didPlayerWin(nb_round);
 
-        this.currentPlayer += 1;
-        if (this.currentPlayer == this.players.length) this.currentPlayer = 0;
+        this.nextPlayer();
 
         return winner;
       }
     } else {
       this.players[this.currentPlayer].joker_is_use_now = false;
-      this.currentPlayer += 1;
-      if (this.currentPlayer == this.players.length)
-        this.currentPlayer = 0;
+      this.nextPlayer();
       return true;
     }
   }
@@ -294,7 +319,7 @@ export class Game {
     if (this._neverUseJoker) return false;
     if (this._forceJoker && player.joker) {
       player.joker = false;
-      player.joker_is_use_now = true
+      player.joker_is_use_now = true;
       return true;
     }
 
@@ -302,7 +327,7 @@ export class Game {
       const randomRoll = Math.floor(Math.random() * 3);
       if (randomRoll === 1) {
         player.joker = false;
-        player.joker_is_use_now = true
+        player.joker_is_use_now = true;
         return true;
       }
     }
