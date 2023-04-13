@@ -20,6 +20,8 @@ export class Player {
   private _streak: number = 0
   private _alwaysTrueAnswer : boolean;
   private _visiteInJail: number = 0;
+  private _turnInJail: number = 0;
+  private _alwaysInJail: boolean = false;
 
   constructor(name: string) {
     this._name = name;
@@ -49,6 +51,10 @@ export class Player {
 
   set alwaysFalseAnswer(value: boolean) {
     this._alwaysFalseAnswer = value;
+  }
+
+  set alwaysInJail(value: boolean) {
+    this._alwaysInJail = value;
   }
 
   get alwaysGetOutOfPenaltyBox(): boolean {
@@ -117,5 +123,19 @@ export class Player {
 
   public goToJail() {
     this._visiteInJail++
+  }
+  public leaveJail() {
+    this._turnInJail = 0
+  }
+  public stayInJail() {
+    this._turnInJail++
+  }
+  public getOutOfJail(): boolean {
+    if (this._alwaysInJail && this._visiteInJail != 1) return false;
+    return this.chanceToGetOutOfJail > Math.random()
+  }
+  get chanceToGetOutOfJail() : number {
+    const chance = Math.round(((1/this._visiteInJail ) + this._turnInJail * 0.1)*100)/100
+    return chance > 1 ? 1 : chance;
   }
 }
