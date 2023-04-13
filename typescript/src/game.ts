@@ -104,6 +104,19 @@ export class Game {
     if (this.currentPlayer == this.players.length) this.currentPlayer = 0;
   }
 
+  private changePlayerPosition(roll: number, nb_round: number) {
+    this.players[this.currentPlayer].place =
+      this.players[this.currentPlayer].place + roll;
+    if (this.players[this.currentPlayer].place > 11) {
+      this.players[this.currentPlayer].place =
+        this.players[this.currentPlayer].place - 12;
+    }
+    this._console.WriteLine(
+      "[round " + nb_round + "] " + this.players[this.currentPlayer].name +
+      "'s new location is " +
+      this.players[this.currentPlayer].place
+    );
+  }
   public roll(roll: number, nb_round: number) {
     if (this.players[this.currentPlayer].alwaysGetOutOfPenaltyBox) {
       roll = 3;
@@ -127,24 +140,14 @@ export class Game {
           "[round " + nb_round + "] " + this.players[this.currentPlayer].name +
           " is getting out of the penalty box"
         );
-        this.players[this.currentPlayer].place =
-          this.players[this.currentPlayer].place + roll;
-        if (this.players[this.currentPlayer].place > 11) {
-          this.players[this.currentPlayer].place =
-            this.players[this.currentPlayer].place - 12;
-        }
+        this.changePlayerPosition(roll, nb_round);
 
-        this._console.WriteLine(
-          "[round " + nb_round + "] " + this.players[this.currentPlayer].name +
-            "'s new location is " +
-            this.players[this.currentPlayer].place
-        );
+
         this._console.WriteLine("[round " + nb_round + "] " + "The category is " + this.currentCategory());
-        if (!this.useJoker(this.players[this.currentPlayer])) {
-          this.askQuestion(nb_round);
+        if (this.isPlayerUseJoker(this.players[this.currentPlayer])) {
+          this.useJoker(this.players[this.currentPlayer], nb_round);
         } else {
-          this._console.WriteLine("[round " + nb_round + "] " + this.players[this.currentPlayer].name + ' uses a joker');
-          this._console.WriteLine("[round " + nb_round + "] " + this.players[this.currentPlayer].name + ' doesn\'t earn gold this turn. He has ' + this.players[this.currentPlayer].gold + " gold");
+          this.askQuestion(nb_round);
         }
       } else {
         this._console.WriteLine(
@@ -155,25 +158,12 @@ export class Game {
         this.players[this.currentPlayer].inPenaltyBox = true;
       }
     } else {
-      this.players[this.currentPlayer].place =
-        this.players[this.currentPlayer].place + roll;
-      if (this.players[this.currentPlayer].place > 11) {
-        this.players[this.currentPlayer].place =
-          this.players[this.currentPlayer].place - 12;
-      }
-
-      this._console.WriteLine(
-        "[round " + nb_round + "] " +
-        this.players[this.currentPlayer].name +
-          "'s new location is " +
-          this.players[this.currentPlayer].place
-      );
+      this.changePlayerPosition(roll, nb_round);
       this._console.WriteLine("[round " + nb_round + "] " + "The category is " + this.currentCategory());
-      if (!this.useJoker(this.players[this.currentPlayer])) {
-        this.askQuestion(nb_round);
+      if (this.isPlayerUseJoker(this.players[this.currentPlayer])) {
+        this.useJoker(this.players[this.currentPlayer], nb_round);
       } else {
-        this._console.WriteLine("[round " + nb_round + "] " + this.players[this.currentPlayer].name + ' uses a joker');
-        this._console.WriteLine("[round " + nb_round + "] " + this.players[this.currentPlayer].name + ' doesn\'t earn gold this turn. He has ' + this.players[this.currentPlayer].gold + " gold");
+        this.askQuestion(nb_round);
       }
     }
   }
@@ -332,22 +322,24 @@ export class Game {
     }
   }
 
-  public useJoker(player: Player) {
+  isPlayerUseJoker(player: Player): boolean {
     if (this._neverUseJoker) return false;
+
     if (this._forceJoker && player.joker) {
-      player.joker = false;
-      player.joker_is_use_now = true;
       return true;
     }
 
     if (player.joker) {
       const randomRoll = Math.floor(Math.random() * 3);
-      if (randomRoll === 1) {
-        player.joker = false;
-        player.joker_is_use_now = true;
-        return true;
-      }
+      return randomRoll === 1;
     }
+
     return false;
+  }
+  public useJoker(player: Player, nb_round: number): void {
+    player.joker = false;
+    player.joker_is_use_now = true;
+    this._console.WriteLine("[round " + nb_round + "] " + this.players[this.currentPlayer].name + ' uses a joker');
+    this._console.WriteLine("[round " + nb_round + "] " + this.players[this.currentPlayer].name + ' doesn\'t earn gold this turn. He has ' + this.players[this.currentPlayer].gold + " gold");
   }
 }
