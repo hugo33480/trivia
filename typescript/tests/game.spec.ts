@@ -18,6 +18,7 @@ describe("The test environment", () => {
             ])
             .withTechnoQuestions()
             .withCustomConsole(console)
+            .withCoinGoal(30)
             .build()
     );
     expect(console.Content).toContain("Techno Question");
