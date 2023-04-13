@@ -7,6 +7,9 @@ export class Game {
   private _neverUseJoker: boolean = false;
   private purses: Array<number> = [];
   private _currentPlayer: number = 0;
+
+  private _nbQuestions: number = 1;
+
   private _currentCategoryChoosed: string = "";
   private popQuestions: Array<string> = [];
   private scienceQuestions: Array<string> = [];
@@ -39,16 +42,18 @@ export class Game {
     forceJoker: boolean,
     neverUseJoker: boolean,
     coinGoal: number
-  , nextCategoryIsSport: boolean) {
+  , nextCategoryIsSport: boolean,
+    nbQuestions: number) {
     this._console = console;
     this._forceJoker = forceJoker;
     this._coinGoal = coinGoal;
+    this._nbQuestions = nbQuestions;
     this._neverUseJoker = neverUseJoker;
     this._nextCategoryIsSport = nextCategoryIsSport;
     for (const player of players) {
       this.add(player);
     }
-    for (let i = 0; i < 50; i++) {
+    for (let i = 0; i < this._nbQuestions; i++) {
       this.popQuestions.push("Pop Question " + i);
       this.scienceQuestions.push("Science Question " + i);
       this.sportsQuestions.push("Sports Question " + i);
@@ -173,15 +178,27 @@ export class Game {
     }
   }
 
-  private askQuestion(nb_round: number): void {
-    if (this.currentCategory() == "Pop")
-      this._console.WriteLine("[round " + nb_round + "] " + this.popQuestions.shift()!);
-    if (this.currentCategory() == "Science")
-      this._console.WriteLine("[round " + nb_round + "] " + this.scienceQuestions.shift()!);
-    if (this.currentCategory() == "Sports")
-      this._console.WriteLine("[round " + nb_round + "] " + this.sportsQuestions.shift()!);
-    if (this.currentCategory() == "Rock")
-      this._console.WriteLine("[round " + nb_round + "] " + this.rockOrTechnoQuestions.shift()!);
+  private askQuestion(): void {
+    if (this.currentCategory() == "Pop") {
+      const question = this.popQuestions.shift();
+      this._console.WriteLine("[round " + question);
+      this.popQuestions.push(question);
+    }
+    if (this.currentCategory() == "Science") {
+      const question = this.scienceQuestions.shift();
+      this._console.WriteLine("[round " + question);
+      this.scienceQuestions.push(question);
+    }
+    if (this.currentCategory() == "Sports") {
+      const question = this.sportsQuestions.shift();
+      this._console.WriteLine("[round " + question);
+      this.sportsQuestions.push(question);
+    }
+    if (this.currentCategory() == "Rock") {
+      const question = this.rockOrTechnoQuestions.shift();
+      this._console.WriteLine("[round " + question);
+      this.rockOrTechnoQuestions.push(question);
+    }
     this._currentCategoryChoosed = "";
   }
 
