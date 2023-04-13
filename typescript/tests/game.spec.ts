@@ -157,6 +157,12 @@ describe("The test environment", () => {
       expect(console.Content).toContain("The coin goal must be 6 or higher");
   });
 
+  it("should deck category Pop being infinite", function () {
+      const console = new ConsoleSpy();
+      GameRunner.main(new GameBuilder().withPlayers([new Player('Rémi'), new Player('Théo'), new Player('Nicolas'), new Player('Florian'), new Player('Gauthier'), new Player('Hugo')]).withCustomConsole(console).withOneQuestions().build());
+      expect((console.Content.match(/Pop Question 0/g) || []).length).not.toBeLessThan(1);
+  });
+
   it("should the player go to jail each turn and have less chance to get out each time", function () {
     const console = new ConsoleSpy();
     GameRunner.main(new GameBuilder().withPlayers([new Player('Rémi'), new Player("blbal")]).withFirstPlayerWithOnlyFalseAnswer().withNeverUseJoker().withCustomConsole(console).withCoinGoal(15).build());

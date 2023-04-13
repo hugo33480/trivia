@@ -15,6 +15,8 @@ export class GameBuilder {
   private neverUseJoker: boolean = false;
   private technoQuestion: boolean = false;
 
+  private nbQuestions: number = 50;
+
   withTechnoQuestions() {
     this.technoQuestion = true;
     return this;
@@ -60,12 +62,17 @@ export class GameBuilder {
     return this;
   }
 
+  withOneQuestions(): GameBuilder {
+    this.nbQuestions = 1;
+    return this
+  }
+
   // withTechnoQuestions() {
   //   this.technoQuestion = true;
   //   return this;
   // }
 
   build(): Game {
-    return new Game(this.console, this.players, this.technoQuestion, this.forceJoker, this.neverUseJoker, this.coinGoal);
+    return new Game(this.console, this.players, this.technoQuestion, this.forceJoker, this.neverUseJoker, this.coinGoal, this.nbQuestions);
   }
 }
