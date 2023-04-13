@@ -178,25 +178,25 @@ export class Game {
     }
   }
 
-  private askQuestion(): void {
+  private askQuestion(nb_round: number): void {
     if (this.currentCategory() == "Pop") {
       const question = this.popQuestions.shift();
-      this._console.WriteLine("[round " + question);
+      this._console.WriteLine("[round " + nb_round + "] " + question);
       this.popQuestions.push(question);
     }
     if (this.currentCategory() == "Science") {
       const question = this.scienceQuestions.shift();
-      this._console.WriteLine("[round " + question);
+      this._console.WriteLine("[round " + nb_round + "] " + question);
       this.scienceQuestions.push(question);
     }
     if (this.currentCategory() == "Sports") {
       const question = this.sportsQuestions.shift();
-      this._console.WriteLine("[round " + question);
+      this._console.WriteLine("[round " + nb_round + "] " + question);
       this.sportsQuestions.push(question);
     }
     if (this.currentCategory() == "Rock") {
       const question = this.rockOrTechnoQuestions.shift();
-      this._console.WriteLine("[round " + question);
+      this._console.WriteLine("[round " + nb_round + "] " + question);
       this.rockOrTechnoQuestions.push(question);
     }
     this._currentCategoryChoosed = "";
