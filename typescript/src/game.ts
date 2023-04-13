@@ -14,6 +14,7 @@ export class Game {
   private rockOrTechnoQuestions: Array<string> = [];
   private _console: IConsole;
   private _coinGoal: number;
+  private _nextCategoryIsSport: boolean;
 
   get console(): IConsole {
     return this._console;
@@ -31,11 +32,12 @@ export class Game {
     this._currentPlayer = value;
   }
 
-  constructor(console: IConsole, players: Array<Player>, techno: boolean, forceJoker: boolean, neverUseJoker: boolean, coinGoal: number) {
+  constructor(console: IConsole, players: Array<Player>, techno: boolean, forceJoker: boolean, neverUseJoker: boolean, coinGoal: number, nextCategoryIsSport: boolean) {
     this._console = console;
     this._forceJoker = forceJoker;
     this._coinGoal = coinGoal;
     this._neverUseJoker = neverUseJoker;
+    this._nextCategoryIsSport = nextCategoryIsSport;
     for (const player of players) {
       this.add(player);
     }
@@ -232,6 +234,10 @@ export class Game {
   }
 
   public chooseNextCategory() {
+    if (this._nextCategoryIsSport) {
+      this._currentCategoryChoosed = "Sports";
+      return;
+    }
     const randomRoll = Math.floor(Math.random() * 4);
     switch (randomRoll) {
       case 0:

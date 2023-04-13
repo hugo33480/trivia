@@ -13,6 +13,7 @@ export class GameBuilder {
   private coinGoal: number = 6;
   private forceJoker: boolean = false;
   private neverUseJoker: boolean = false;
+  private nextCategoryIsSport: boolean = false;
   private technoQuestion: boolean = false;
 
   withTechnoQuestions() {
@@ -55,6 +56,11 @@ export class GameBuilder {
     return this;
   }
 
+  withNextCategoryIsSport(): GameBuilder {
+    this.nextCategoryIsSport = true;
+    return this;
+  }
+
   withCoinGoal(coinGoal: number): GameBuilder {
     this.coinGoal = coinGoal;
     return this;
@@ -66,6 +72,6 @@ export class GameBuilder {
   // }
 
   build(): Game {
-    return new Game(this.console, this.players, this.technoQuestion, this.forceJoker, this.neverUseJoker, this.coinGoal);
+    return new Game(this.console, this.players, this.technoQuestion, this.forceJoker, this.neverUseJoker, this.coinGoal, this.nextCategoryIsSport);
   }
 }

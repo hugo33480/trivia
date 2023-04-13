@@ -125,8 +125,10 @@ describe("The test environment", () => {
 
   it("should the player who goes to jail chooses the following category", function () {
     const console = new ConsoleSpy();
-    GameRunner.main(new GameBuilder().withPlayers([new Player('Rémi'), new Player("blbal")]).withFirstPlayerWithOnlyFalseAnswer().withNeverUseJoker().withCustomConsole(console).build());
-    expect(console.Content).toContain("has chosen the next category");
+    GameRunner.main(new GameBuilder().withPlayers([new Player('Rémi'), new Player("Constantin")]).withFirstPlayerWithOnlyFalseAnswer().withNeverUseJoker().withNextCategoryIsSport().withCustomConsole(console).build());
+    expect(console.Content).toContain("[round 1] Rémi has chosen the next category which is : Sports");
+    expect(console.Content).toContain("[round 1] Constantin is the current player.");
+    expect(console.Content).toContain("[round 1] Sports Question");
   });
 
   it("should increment streak", function () {
