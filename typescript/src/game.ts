@@ -2,6 +2,7 @@ import { Player } from "./Player";
 import { IConsole } from "./IConsole";
 
 export class Game {
+
   private _players: Array<Player> = [];
   private _forceJoker: boolean = false;
   private _neverUseJoker: boolean = false;
@@ -139,7 +140,8 @@ export class Game {
             "'s new location is " +
             this.players[this.currentPlayer].place
         );
-        this._console.WriteLine("[round " + nb_round + "] " + "The category is " + this.currentCategory());
+        this.pickCategory();
+        this._console.WriteLine("[round " + nb_round + "] " + "The category is " + this._currentCategoryChoosed);
         if (!this.useJoker(this.players[this.currentPlayer])) {
           this.askQuestion(nb_round);
         } else {
@@ -168,7 +170,8 @@ export class Game {
           "'s new location is " +
           this.players[this.currentPlayer].place
       );
-      this._console.WriteLine("[round " + nb_round + "] " + "The category is " + this.currentCategory());
+      this.pickCategory();
+      this._console.WriteLine("[round " + nb_round + "] " + "The category is " + this._currentCategoryChoosed);
       if (!this.useJoker(this.players[this.currentPlayer])) {
         this.askQuestion(nb_round);
       } else {
@@ -177,24 +180,24 @@ export class Game {
       }
     }
   }
-
+  
   private askQuestion(nb_round: number): void {
-    if (this.currentCategory() == "Pop") {
+    if (this._currentCategoryChoosed == "Pop") {
       const question = this.popQuestions.shift();
       this._console.WriteLine("[round " + nb_round + "] " + question);
       this.popQuestions.push(question);
     }
-    if (this.currentCategory() == "Science") {
+    if (this._currentCategoryChoosed == "Science") {
       const question = this.scienceQuestions.shift();
       this._console.WriteLine("[round " + nb_round + "] " + question);
       this.scienceQuestions.push(question);
     }
-    if (this.currentCategory() == "Sports") {
+    if (this._currentCategoryChoosed == "Sports") {
       const question = this.sportsQuestions.shift();
       this._console.WriteLine("[round " + nb_round + "] " + question);
       this.sportsQuestions.push(question);
     }
-    if (this.currentCategory() == "Rock") {
+    if (this._currentCategoryChoosed == "Rock") {
       const question = this.rockOrTechnoQuestions.shift();
       this._console.WriteLine("[round " + nb_round + "] " + question);
       this.rockOrTechnoQuestions.push(question);
@@ -202,20 +205,10 @@ export class Game {
     this._currentCategoryChoosed = "";
   }
 
-  private currentCategory(): string {
+  pickCategory(): void {
+    const allCategory = ["Pop", "Sports", "Science", "Rock"]
     if (this._currentCategoryChoosed === "") {
-      if (this.players[this.currentPlayer].place == 0) return "Pop";
-      if (this.players[this.currentPlayer].place == 4) return "Pop";
-      if (this.players[this.currentPlayer].place == 8) return "Pop";
-      if (this.players[this.currentPlayer].place == 1) return "Science";
-      if (this.players[this.currentPlayer].place == 5) return "Science";
-      if (this.players[this.currentPlayer].place == 9) return "Science";
-      if (this.players[this.currentPlayer].place == 2) return "Sports";
-      if (this.players[this.currentPlayer].place == 6) return "Sports";
-      if (this.players[this.currentPlayer].place == 10) return "Sports";
-      return "Rock";
-    } else {
-      return this._currentCategoryChoosed;
+      this._currentCategoryChoosed = allCategory[Math.floor(Math.random() * (allCategory.length))]
     }
   }
 

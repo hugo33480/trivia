@@ -185,4 +185,38 @@ describe("The test environment", () => {
     expect(console.Content.match(/Rémi's visit to jail : 2, he has now 1 chance on 2 to get out next turn/g).length).toBe(1)
 
   });
+  it("test stats", function () {
+    let res : {[key:string]: number}  = {
+      "Pop":0,
+      "Sports":0,
+      "Rock":0,
+      "Science":0
+    }
+    const console = new ConsoleSpy();
+    for(let i = 0; i < 3000; i++){
+      GameRunner.main(new GameBuilder().withCustomConsole(console).build());
+      res.Pop += (console.Content.match(/The category is Pop/g) || []).length
+      res.Rock += (console.Content.match(/The category is Rock/g) || []).length
+      res.Science += (console.Content.match(/The category is Science/g) || []).length
+      res.Sports += (console.Content.match(/The category is Sports/g) || []).length
+    }
+
+    let total = res.Pop + res.Science + res.Sports + res.Rock
+
+    let resPop = res.Pop/total*100
+    expect(resPop).toBeGreaterThan(24)
+    expect(resPop).toBeLessThan(26)
+
+    let resRock = res.Rock/total*100
+    expect(resRock).toBeGreaterThan(24)
+    expect(resRock).toBeLessThan(26)
+
+    let resScience = res.Science/total*100
+    expect(resScience).toBeGreaterThan(24)
+    expect(resScience).toBeLessThan(26)
+
+    let resSports = res.Sports/total*100
+    expect(resSports).toBeGreaterThan(24)
+    expect(resSports).toBeLessThan(26)
+  });
 });
