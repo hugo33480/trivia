@@ -5,11 +5,8 @@ export class Game {
   private _players: Array<Player> = [];
   private _forceJoker: boolean = false;
   private _neverUseJoker: boolean = false;
-  private purses: Array<number> = [];
   private _currentPlayer: number = 0;
-
   private _nbQuestions: number = 1;
-
   private _currentCategoryChoosed: string = "";
   private popQuestions: Array<string> = [];
   private scienceQuestions: Array<string> = [];
@@ -69,7 +66,6 @@ export class Game {
 
   public add(player: Player): boolean {
     this.players.push(player);
-    this.purses[this.howManyPlayers()] = 0;
 
     this._console.WriteLine("---------- Adding Player ----------");
     this._console.WriteLine(player.name + " was added");
