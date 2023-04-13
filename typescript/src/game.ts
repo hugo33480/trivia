@@ -157,7 +157,7 @@ export class Game {
     } else {
       this.changePlayerPosition(roll, nb_round);
       this.pickCategory();
-      this._console.WriteLine("[round " + nb_round + "] " + "The category is " + this.currentCategory());
+      this._console.WriteLine("[round " + nb_round + "] " + "The category is " + this._currentCategoryChoosed);
       if (this.isPlayerUseJoker(this.players[this.currentPlayer])) {
         this.useJoker(this.players[this.currentPlayer], nb_round);
       } else {
