@@ -43,6 +43,11 @@ export class GameBuilder {
     return this
   }
 
+  withFirstPlayerAlwaysInJail(): GameBuilder {
+    this.players[0].alwaysInJail = true;
+    return this
+  }
+
   withCustomConsole(console: IConsole): GameBuilder {
     this.console = console;
     return this;

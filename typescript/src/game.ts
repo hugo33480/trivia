@@ -119,11 +119,10 @@ export class Game {
 
     if (this.players[this.currentPlayer].inPenaltyBox) {
       if (
-        Math.floor(
-          Math.random() * this.players[this.currentPlayer].visitInJail + 1
-        ) == 1
+          this.players[this.currentPlayer].getOutOfJail()
       ) {
         this.players[this.currentPlayer].inPenaltyBox = false;
+        this.players[this.currentPlayer].leaveJail();
         this._console.WriteLine(
           "[round " + nb_round + "] " + this.players[this.currentPlayer].name +
           " is getting out of the penalty box"
@@ -149,10 +148,11 @@ export class Game {
           this._console.WriteLine("[round " + nb_round + "] " + this.players[this.currentPlayer].name + ' doesn\'t earn gold this turn. He has ' + this.players[this.currentPlayer].gold + " gold");
         }
       } else {
+        this.players[this.currentPlayer].stayInJail();
         this._console.WriteLine(
           "[round " + nb_round + "] " +
           this.players[this.currentPlayer].name +
-            " is not getting out of the penalty box"
+            " is not getting out of the penalty box, it's chance to get out are now " + this.players[this.currentPlayer].chanceToGetOutOfJail + " on 1"
         );
         this.players[this.currentPlayer].inPenaltyBox = true;
       }
