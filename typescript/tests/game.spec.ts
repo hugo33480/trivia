@@ -1,7 +1,7 @@
-import {GameBuilder} from "../src/GameBuilder";
-import {ConsoleSpy} from "./ConsoleSpy";
-import {GameRunner} from "../src/game-runner";
-import {Player} from "../src/Player";
+import { GameBuilder } from "../src/GameBuilder";
+import { ConsoleSpy } from "./ConsoleSpy";
+import { GameRunner } from "../src/game-runner";
+import { Player } from "../src/Player";
 
 describe("The test environment", () => {
   it("should test techno question", function () {
@@ -27,7 +27,9 @@ describe("The test environment", () => {
 
   it("should test rock question by default", function () {
     const console = new ConsoleSpy();
-    GameRunner.main(new GameBuilder().withCustomConsole(console).withCoinGoal(15).build());
+    GameRunner.main(
+      new GameBuilder().withCustomConsole(console).withCoinGoal(15).build()
+    );
     expect(console.Content).toContain("Rock Question");
     expect(console.Content).not.toContain("Techno Question");
   });
@@ -79,13 +81,32 @@ describe("The test environment", () => {
 
   it("should test six player and play game", function () {
     const console = new ConsoleSpy();
-    GameRunner.main(new GameBuilder().withPlayers([new Player('Rémi'), new Player('Théo'), new Player('Nicolas'), new Player('Florian'), new Player('Gauthier'), new Player('Hugo')]).withCustomConsole(console).build());
+    GameRunner.main(
+      new GameBuilder()
+        .withPlayers([
+          new Player("Rémi"),
+          new Player("Théo"),
+          new Player("Nicolas"),
+          new Player("Florian"),
+          new Player("Gauthier"),
+          new Player("Hugo"),
+        ])
+        .withCustomConsole(console)
+        .build()
+    );
     expect(console.Content).toContain("now has 6 Gold Coins.");
   });
 
   it("should getting out of prison", function () {
     const console = new ConsoleSpy();
-    GameRunner.main(new GameBuilder().withPlayers([new Player('Rémi'), new Player("blbal")]).withFirstPlayerWithOnlyFalseAnswer().withFirstPlayerAlwaysGettingOut().withCustomConsole(console).build());
+    GameRunner.main(
+      new GameBuilder()
+        .withPlayers([new Player("Rémi"), new Player("blbal")])
+        .withFirstPlayerWithOnlyFalseAnswer()
+        .withFirstPlayerAlwaysGettingOut()
+        .withCustomConsole(console)
+        .build()
+    );
     expect(console.Content).toContain("is getting out of the penalty");
   });
 
@@ -101,34 +122,54 @@ describe("The test environment", () => {
     );
     expect(console.Content).toContain("Hugo leaves the game");
     expect(console.Content).toContain("Nicolas wins the game");
-    expect(console.Content.match(/Hugo is the current player/g).length).toBe(1)
+    expect(console.Content.match(/Hugo is the current player/g).length).toBe(1);
   });
 
   it("should a player can use a joker if he has one left", function () {
     const console = new ConsoleSpy();
-    GameRunner.main(new GameBuilder().withCustomConsole(console).withForceJoker().build());
+    GameRunner.main(
+      new GameBuilder().withCustomConsole(console).withForceJoker().build()
+    );
     expect(console.Content).toContain("uses a joker");
   });
 
   it("should a player cannot use a joker", function () {
     const console = new ConsoleSpy();
-    GameRunner.main(new GameBuilder().withCustomConsole(console).withNeverUseJoker().build());
+    GameRunner.main(
+      new GameBuilder().withCustomConsole(console).withNeverUseJoker().build()
+    );
     expect(console.Content).not.toContain("uses a joker");
-  })
+  });
 
   it("should not earn a gold when player uses a joker", function () {
     const console = new ConsoleSpy();
-    GameRunner.main(new GameBuilder().withCustomConsole(console).withForceJoker().build());
+    GameRunner.main(
+      new GameBuilder().withCustomConsole(console).withForceJoker().build()
+    );
     expect(console.Content).toContain("Pat is the current player. Has 0 gold");
     expect(console.Content).toContain("Pat uses a joker");
-    expect(console.Content).toContain("Pat doesn't earn gold this turn. He has 0 gold");
-  })
+    expect(console.Content).toContain(
+      "Pat doesn't earn gold this turn. He has 0 gold"
+    );
+  });
 
   it("if the player who goes to jail chooses the following category which will be : Sports", function () {
     const console = new ConsoleSpy();
-    GameRunner.main(new GameBuilder().withPlayers([new Player('Rémi'), new Player("Constantin")]).withFirstPlayerWithOnlyFalseAnswer().withNeverUseJoker().withNextCategoryIsSport().withCustomConsole(console).build());
-    expect(console.Content).toContain("[round 1] Rémi has chosen the next category which is : Sports");
-    expect(console.Content).toContain("[round 1] Constantin is the current player.");
+    GameRunner.main(
+      new GameBuilder()
+        .withPlayers([new Player("Rémi"), new Player("Constantin")])
+        .withFirstPlayerWithOnlyFalseAnswer()
+        .withNeverUseJoker()
+        .withNextCategoryIsSport()
+        .withCustomConsole(console)
+        .build()
+    );
+    expect(console.Content).toContain(
+      "[round 1] Rémi has chosen the next category which is : Sports"
+    );
+    expect(console.Content).toContain(
+      "[round 1] Constantin is the current player."
+    );
     expect(console.Content).toContain("[round 1] Sports Question");
   });
 
@@ -142,7 +183,14 @@ describe("The test environment", () => {
 
   it("should increment streak", function () {
     const console = new ConsoleSpy();
-    GameRunner.main(new GameBuilder().withPlayers([new Player('Rémi'), new Player("Théo")]).withFirstPlayerWithOnlyTrueAnswer().withCustomConsole(console).withCoinGoal(7).build());
+    GameRunner.main(
+      new GameBuilder()
+        .withPlayers([new Player("Rémi"), new Player("Théo")])
+        .withFirstPlayerWithOnlyTrueAnswer()
+        .withCustomConsole(console)
+        .withCoinGoal(7)
+        .build()
+    );
     expect(console.Content).toContain("Rémi streak is now 2");
     expect(console.Content).toContain("Rémi streak is now 3");
     expect(console.Content).toContain("Rémi now has 3 Gold Coins.");
@@ -151,80 +199,162 @@ describe("The test environment", () => {
 
   it("should reset streak", function () {
     const console = new ConsoleSpy();
-    GameRunner.main(new GameBuilder().withPlayers([new Player('Rémi'), new Player("Théo")]).withFirstPlayerWithOnlyFalseAnswer().withFirstPlayerAlwaysGettingOut().withCustomConsole(console).build());
+    GameRunner.main(
+      new GameBuilder()
+        .withPlayers([new Player("Rémi"), new Player("Théo")])
+        .withFirstPlayerWithOnlyFalseAnswer()
+        .withFirstPlayerAlwaysGettingOut()
+        .withCustomConsole(console)
+        .build()
+    );
     expect(console.Content).toContain("Rémi answer streak was reset to 0");
   });
 
   it("should set coin goal to 7", function () {
-      const console = new ConsoleSpy();
-      GameRunner.main(new GameBuilder().withCoinGoal(7).withCustomConsole(console).build());
-      expect(console.Content).toContain("now has 7 Gold Coins.");
-      expect(console.Content).toContain("wins the game");
+    const console = new ConsoleSpy();
+    GameRunner.main(
+      new GameBuilder().withCoinGoal(7).withCustomConsole(console).build()
+    );
+    expect(console.Content).toContain("now has 7 Gold Coins.");
+    expect(console.Content).toContain("wins the game");
   });
 
   it("should set coin goal to 5 then game not start", function () {
-      const console = new ConsoleSpy();
-      GameRunner.main(new GameBuilder().withCoinGoal(5).withCustomConsole(console).build());
-      expect(console.Content).toContain("The coin goal must be 6 or higher");
+    const console = new ConsoleSpy();
+    GameRunner.main(
+      new GameBuilder().withCoinGoal(5).withCustomConsole(console).build()
+    );
+    expect(console.Content).toContain("The coin goal must be 6 or higher");
   });
 
   it("should deck category Pop being infinite", function () {
-      const console = new ConsoleSpy();
-      GameRunner.main(new GameBuilder().withPlayers([new Player('Rémi'), new Player('Théo'), new Player('Nicolas'), new Player('Florian'), new Player('Gauthier'), new Player('Hugo')]).withCustomConsole(console).withOneQuestions().build());
-      expect((console.Content.match(/Pop Question 0/g) || []).length).not.toBeLessThan(1);
+    const console = new ConsoleSpy();
+    GameRunner.main(
+      new GameBuilder()
+        .withPlayers([
+          new Player("Rémi"),
+          new Player("Théo"),
+          new Player("Nicolas"),
+          new Player("Florian"),
+          new Player("Gauthier"),
+          new Player("Hugo"),
+        ])
+        .withCustomConsole(console)
+        .withOneQuestions()
+        .build()
+    );
+    expect(
+      (console.Content.match(/Pop Question 0/g) || []).length
+    ).not.toBeLessThan(1);
   });
 
   it("should deck category Sports being infinite", function () {
     const console = new ConsoleSpy();
-    GameRunner.main(new GameBuilder().withPlayers([new Player('Rémi'), new Player('Théo'), new Player('Nicolas'), new Player('Florian'), new Player('Gauthier'), new Player('Hugo')]).withCustomConsole(console).withOneQuestions().build());
-    expect((console.Content.match(/Sports Question 0/g) || []).length).not.toBeLessThan(1);
+    GameRunner.main(
+      new GameBuilder()
+        .withPlayers([
+          new Player("Rémi"),
+          new Player("Théo"),
+          new Player("Nicolas"),
+          new Player("Florian"),
+          new Player("Gauthier"),
+          new Player("Hugo"),
+        ])
+        .withCustomConsole(console)
+        .withOneQuestions()
+        .build()
+    );
+    expect(
+      (console.Content.match(/Sports Question 0/g) || []).length
+    ).not.toBeLessThan(1);
   });
 
   it("should deck category Science being infinite", function () {
     const console = new ConsoleSpy();
-    GameRunner.main(new GameBuilder().withPlayers([new Player('Rémi'), new Player('Théo'), new Player('Nicolas'), new Player('Florian'), new Player('Gauthier'), new Player('Hugo')]).withCustomConsole(console).withOneQuestions().build());
-    expect((console.Content.match(/Science Question 0/g) || []).length).not.toBeLessThan(1);
+    GameRunner.main(
+      new GameBuilder()
+        .withPlayers([
+          new Player("Rémi"),
+          new Player("Théo"),
+          new Player("Nicolas"),
+          new Player("Florian"),
+          new Player("Gauthier"),
+          new Player("Hugo"),
+        ])
+        .withCustomConsole(console)
+        .withOneQuestions()
+        .build()
+    );
+    expect(
+      (console.Content.match(/Science Question 0/g) || []).length
+    ).not.toBeLessThan(1);
   });
 
   it("should the player go to jail each turn and have less chance to get out each time", function () {
     const console = new ConsoleSpy();
-    GameRunner.main(new GameBuilder().withPlayers([new Player('Rémi'), new Player("blbal")]).withFirstPlayerAlwaysInJail().withFirstPlayerWithOnlyFalseAnswer().withNeverUseJoker().withCustomConsole(console).withCoinGoal(15).build());
-    expect(console.Content).toContain("Rémi is not getting out of the penalty box, it's chance to get out are now 0.6 on 1");
-    expect(console.Content).toContain("Rémi is not getting out of the penalty box, it's chance to get out are now 0.7 on 1");
+    GameRunner.main(
+      new GameBuilder()
+        .withPlayers([new Player("Rémi"), new Player("blbal")])
+        .withFirstPlayerAlwaysInJail()
+        .withFirstPlayerWithOnlyFalseAnswer()
+        .withNeverUseJoker()
+        .withCustomConsole(console)
+        .withCoinGoal(15)
+        .build()
+    );
+    expect(console.Content).toContain(
+      "Rémi is not getting out of the penalty box, it's chance to get out are now 0.6 on 1"
+    );
+    expect(console.Content).toContain(
+      "Rémi is not getting out of the penalty box, it's chance to get out are now 0.7 on 1"
+    );
   });
 
-  it("test stats", function () {
-    let res : {[key:string]: number}  = {
-      "Pop":0,
-      "Sports":0,
-      "Rock":0,
-      "Science":0
-    }
+  it("should the player go to jail each turn and have less chance to get out each time", function () {
     const console = new ConsoleSpy();
-    for(let i = 0; i < 3000; i++){
+    GameRunner.main(new GameBuilder().withPlayers([new Player('Rémi'), new Player("blbal")]).withFirstPlayerWithOnlyFalseAnswer().withNeverUseJoker().withCustomConsole(console).withCoinGoal(15).build());
+    expect(console.Content.match(/Rémi's visit to jail : 1, he has now 1 chance on 1 to get out next turn/g).length).toBe(1)
+    expect(console.Content).toContain("Rémi is getting out of the penalty box");
+    expect(console.Content.match(/Rémi's visit to jail : 2, he has now 1 chance on 2 to get out next turn/g).length).toBe(1)
+
+
+  });
+  it("test stats", function () {
+    let res: { [key: string]: number } = {
+      Pop: 0,
+      Sports: 0,
+      Rock: 0,
+      Science: 0,
+    };
+    const console = new ConsoleSpy();
+    for (let i = 0; i < 3000; i++) {
       GameRunner.main(new GameBuilder().withCustomConsole(console).build());
-      res.Pop += (console.Content.match(/The category is Pop/g) || []).length
-      res.Rock += (console.Content.match(/The category is Rock/g) || []).length
-      res.Science += (console.Content.match(/The category is Science/g) || []).length
-      res.Sports += (console.Content.match(/The category is Sports/g) || []).length
+      res.Pop += (console.Content.match(/The category is Pop/g) || []).length;
+      res.Rock += (console.Content.match(/The category is Rock/g) || []).length;
+      res.Science += (
+        console.Content.match(/The category is Science/g) || []
+      ).length;
+      res.Sports += (
+        console.Content.match(/The category is Sports/g) || []
+      ).length;
     }
 
-    let total = res.Pop + res.Science + res.Sports + res.Rock
+    let total = res.Pop + res.Science + res.Sports + res.Rock;
 
-    let resPop = res.Pop/total*100
-    expect(resPop).toBeGreaterThan(24)
-    expect(resPop).toBeLessThan(26)
+    let resPop = (res.Pop / total) * 100;
+    expect(resPop).toBeGreaterThan(24);
+    expect(resPop).toBeLessThan(26);
 
-    let resRock = res.Rock/total*100
-    expect(resRock).toBeGreaterThan(24)
-    expect(resRock).toBeLessThan(26)
+    let resRock = (res.Rock / total) * 100;
+    expect(resRock).toBeGreaterThan(24);
+    expect(resRock).toBeLessThan(26);
 
-    let resScience = res.Science/total*100
-    expect(resScience).toBeGreaterThan(24)
-    expect(resScience).toBeLessThan(26)
+    let resScience = (res.Science / total) * 100;
+    expect(resScience).toBeGreaterThan(24);
+    expect(resScience).toBeLessThan(26);
 
-    let resSports = res.Sports/total*100
-    expect(resSports).toBeGreaterThan(24)
-    expect(resSports).toBeLessThan(26)
+    let resSports = (res.Sports / total) * 100;
+    expect(resSports).toBeGreaterThan(24);
+    expect(resSports).toBeLessThan(26);
   });
 });
