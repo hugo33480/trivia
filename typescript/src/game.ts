@@ -17,6 +17,7 @@ export class Game {
   private _nextCategoryIsSport: boolean;
   private _nextCategoryIsScience: boolean;
   private _penaltyBoxes: Array<Player> = [];
+  private _placeInPenaltyBox: number;
 
   get console(): IConsole {
     return this._console;
@@ -43,7 +44,8 @@ export class Game {
     coinGoal: number,
     nextCategoryIsSport: boolean,
     nextCategoryIsScience: boolean,
-    nbQuestions: number) {
+    nbQuestions: number,
+    placeInPenaltyBox: number) {
     this._console = console;
     this._forceJoker = forceJoker;
     this._coinGoal = coinGoal;
@@ -51,6 +53,7 @@ export class Game {
     this._neverUseJoker = neverUseJoker;
     this._nextCategoryIsSport = nextCategoryIsSport;
     this._nextCategoryIsScience = nextCategoryIsScience;
+    this._placeInPenaltyBox = placeInPenaltyBox
     for (const player of players) {
       this.add(player);
     }
@@ -254,11 +257,12 @@ export class Game {
       );
       this.players[this._currentPlayer].streak = 0;
       this._penaltyBoxes.unshift(this.players[this._currentPlayer])
-      if (this._penaltyBoxes.length >3){
+
+      if (this._placeInPenaltyBox != 0 && this._penaltyBoxes.length > this._placeInPenaltyBox){
         this._console.WriteLine("[round " + nb_round + "] " +
-        this._penaltyBoxes[3].name + " is getting out of penalty box because penalty box is full")
-        this._penaltyBoxes[3].inPenaltyBox = false;
-        this._penaltyBoxes[3].leaveJail();
+        this._penaltyBoxes[this._placeInPenaltyBox].name + " is getting out of penalty box because penalty box is full")
+        this._penaltyBoxes[this._placeInPenaltyBox].inPenaltyBox = false;
+        this._penaltyBoxes[this._placeInPenaltyBox].leaveJail();
         this._penaltyBoxes.pop();
       }
     } else {
