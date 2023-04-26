@@ -357,4 +357,39 @@ describe("The test environment", () => {
     expect(resSports).toBeGreaterThan(24);
     expect(resSports).toBeLessThan(26);
   });
+
+  it("check maximum size of penalty box (3)", function () {
+    const console = new ConsoleSpy();
+    const players = ["Rémi","Théo","Nicolas", "Florian"].map((name)=>
+        {
+          const player =  new Player(name);
+          player.alwaysInJail = true;
+          player.alwaysFalseAnswer = true;
+          return player
+        }
+    )
+    const winner = new Player("winner")
+    GameRunner.main(new GameBuilder().withPlayers([winner, ...players]).withFirstPlayerWithOnlyTrueAnswer().withCustomConsole(console).withNeverUseJoker().build());
+    expect(console.Content).toContain(
+        "[round 1] Rémi's visit to jail : 1, he has now 1 chance on 1 to get out next turn"
+    );
+    expect(console.Content).toContain(
+        "[round 1] Théo's visit to jail : 1, he has now 1 chance on 1 to get out next turn"
+    );
+    expect(console.Content).toContain(
+        "[round 1] Nicolas's visit to jail : 1, he has now 1 chance on 1 to get out next turn"
+    );
+    expect(console.Content).toContain(
+        "[round 1] Florian's visit to jail : 1, he has now 1 chance on 1 to get out next turn"
+    );
+    expect(console.Content).toContain(
+        "[round 1] Rémi is getting out of penalty box because penalty box is full"
+    );
+    expect(console.Content).not.toContain(
+        "[round 2] Rémi is getting out of the penalty box"
+    );
+    expect(console.Content).not.toContain(
+        "[round 2] Rémi is not getting out of the penalty box"
+    );
+  });
 });

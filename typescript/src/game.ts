@@ -16,6 +16,7 @@ export class Game {
   private _coinGoal: number;
   private _nextCategoryIsSport: boolean;
   private _nextCategoryIsScience: boolean;
+  private _penaltyBoxes: Array<Player> = [];
 
   get console(): IConsole {
     return this._console;
@@ -252,6 +253,14 @@ export class Game {
         `${this.players[this._currentPlayer].name} answer streak was reset to 0`
       );
       this.players[this._currentPlayer].streak = 0;
+      this._penaltyBoxes.unshift(this.players[this._currentPlayer])
+      if (this._penaltyBoxes.length >3){
+        this._console.WriteLine("[round " + nb_round + "] " +
+        this._penaltyBoxes[3].name + " is getting out of penalty box because penalty box is full")
+        this._penaltyBoxes[3].inPenaltyBox = false;
+        this._penaltyBoxes[3].leaveJail();
+        this._penaltyBoxes.pop();
+      }
     } else {
       this.players[this.currentPlayer].joker_is_use_now = false;
     }
