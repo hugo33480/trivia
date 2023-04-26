@@ -16,6 +16,7 @@ export class GameBuilder {
   private nextCategoryIsSport: boolean = false;
   private nextCategoryIsScience: boolean = false;
   private technoQuestion: boolean = false;
+  private placesInJail: number = 0;
 
   private nbQuestions: number = 50;
 
@@ -84,12 +85,17 @@ export class GameBuilder {
     return this
   }
 
+  withPlacesInPrison(nbr : number): GameBuilder {
+    this.placesInJail = nbr;
+    return this;
+  }
+
   // withTechnoQuestions() {
   //   this.technoQuestion = true;
   //   return this;
   // }
 
   build(): Game {
-    return new Game(this.console, this.players, this.technoQuestion, this.forceJoker, this.neverUseJoker, this.coinGoal, this.nextCategoryIsSport, this.nextCategoryIsScience, this.nbQuestions);
+    return new Game(this.console, this.players, this.technoQuestion, this.forceJoker, this.neverUseJoker, this.coinGoal, this.nextCategoryIsSport, this.nextCategoryIsScience, this.nbQuestions, this.placesInJail);
   }
 }
