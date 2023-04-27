@@ -239,6 +239,7 @@ describe("The test environment", () => {
           new Player("Gauthier"),
           new Player("Hugo"),
         ])
+        .withCoinGoal(15)
         .withCustomConsole(console)
         .withOneQuestions()
         .build()
@@ -260,6 +261,7 @@ describe("The test environment", () => {
           new Player("Gauthier"),
           new Player("Hugo"),
         ])
+        .withCoinGoal(15)
         .withCustomConsole(console)
         .withOneQuestions()
         .build()
@@ -281,6 +283,7 @@ describe("The test environment", () => {
           new Player("Gauthier"),
           new Player("Hugo"),
         ])
+        .withCoinGoal(15)
         .withCustomConsole(console)
         .withOneQuestions()
         .build()
@@ -440,5 +443,35 @@ describe("The test environment", () => {
     expect(console.Content).toContain(
         "[round 2] Gauthier is getting out of the penalty box"
     );
+  });
+
+  it("should game restart once", function () {
+    const console = new ConsoleSpy();
+    GameRunner.main(
+        new GameBuilder().withCustomConsole(console).withCoinGoal(15).withRestartForced(1).build()
+    );
+    expect(
+        (console.Content.match(/Une nouvelle partie commence/g) || []).length
+    ).toBe(1);
+  });
+
+  it("should game restart two times", function () {
+    const console = new ConsoleSpy();
+    GameRunner.main(
+        new GameBuilder().withCustomConsole(console).withCoinGoal(15).withRestartForced(2).build()
+    );
+    expect(
+        (console.Content.match(/Une nouvelle partie commence/g) || []).length
+    ).toBe(2);
+  });
+
+  it("should game restart three times", function () {
+    const console = new ConsoleSpy();
+    GameRunner.main(
+        new GameBuilder().withCustomConsole(console).withCoinGoal(15).withRestartForced(3).build()
+    );
+    expect(
+        (console.Content.match(/Une nouvelle partie commence/g) || []).length
+    ).toBe(3);
   });
 });
