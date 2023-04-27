@@ -19,6 +19,7 @@ export class GameBuilder {
   private placesInJail: number = 0;
 
   private nbQuestions: number = 50;
+  private numberOfWinnerToEndTheGame: number;
 
   withTechnoQuestions() {
     this.technoQuestion = true;
@@ -89,6 +90,11 @@ export class GameBuilder {
     this.placesInJail = nbr;
     return this;
   }
+  
+  withCustomWinner(numberOfWinnerToEndTheGame: number): GameBuilder {
+    this.numberOfWinnerToEndTheGame = numberOfWinnerToEndTheGame;
+    return this;
+  }
 
   // withTechnoQuestions() {
   //   this.technoQuestion = true;
@@ -96,6 +102,6 @@ export class GameBuilder {
   // }
 
   build(): Game {
-    return new Game(this.console, this.players, this.technoQuestion, this.forceJoker, this.neverUseJoker, this.coinGoal, this.nextCategoryIsSport, this.nextCategoryIsScience, this.nbQuestions, this.placesInJail);
+    return new Game(this.console, this.players, this.technoQuestion, this.forceJoker, this.neverUseJoker, this.coinGoal, this.nextCategoryIsSport, this.nextCategoryIsScience, this.nbQuestions, this.placesInJail, this.numberOfWinnerToEndTheGame);
   }
 }

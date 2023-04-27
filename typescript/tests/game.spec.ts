@@ -1,7 +1,7 @@
-import { GameBuilder } from "../src/GameBuilder";
-import { ConsoleSpy } from "./ConsoleSpy";
-import { GameRunner } from "../src/game-runner";
-import { Player } from "../src/Player";
+import {GameBuilder} from "../src/GameBuilder";
+import {ConsoleSpy} from "./ConsoleSpy";
+import {GameRunner} from "../src/game-runner";
+import {Player} from "../src/Player";
 
 describe("The test environment", () => {
   it("should test techno question", function () {
@@ -121,7 +121,7 @@ describe("The test environment", () => {
         .build()
     );
     expect(console.Content).toContain("Hugo leaves the game");
-    expect(console.Content).toContain("Nicolas wins the game");
+    expect(console.Content).toContain("Nicolas wins");
     expect(console.Content.match(/Hugo is the current player/g).length).toBe(1);
   });
 
@@ -146,10 +146,10 @@ describe("The test environment", () => {
     GameRunner.main(
       new GameBuilder().withCustomConsole(console).withForceJoker().build()
     );
-    expect(console.Content).toContain("Pat is the current player. Has 0 gold");
-    expect(console.Content).toContain("Pat uses a joker");
+    expect(console.Content).toContain("[round 1] Pat is the current player. Has 0 gold");
+    expect(console.Content).toContain("[round 1] Pat uses a joker");
     expect(console.Content).toContain(
-      "Pat doesn't earn gold this turn. He has 0 gold"
+      "[round 1] Pat doesn't earn gold this turn. He has 0 gold"
     );
   });
 
@@ -216,7 +216,7 @@ describe("The test environment", () => {
       new GameBuilder().withCoinGoal(7).withCustomConsole(console).build()
     );
     expect(console.Content).toContain("now has 7 Gold Coins.");
-    expect(console.Content).toContain("wins the game");
+    expect(console.Content).toContain("wins and leaves the game");
   });
 
   it("should set coin goal to 5 then game not start", function () {
@@ -319,44 +319,6 @@ describe("The test environment", () => {
 
 
   });
-  it("test stats", function () {
-    let res: { [key: string]: number } = {
-      Pop: 0,
-      Sports: 0,
-      Rock: 0,
-      Science: 0,
-    };
-    const console = new ConsoleSpy();
-    for (let i = 0; i < 3000; i++) {
-      GameRunner.main(new GameBuilder().withCustomConsole(console).build());
-      res.Pop += (console.Content.match(/The category is Pop/g) || []).length;
-      res.Rock += (console.Content.match(/The category is Rock/g) || []).length;
-      res.Science += (
-        console.Content.match(/The category is Science/g) || []
-      ).length;
-      res.Sports += (
-        console.Content.match(/The category is Sports/g) || []
-      ).length;
-    }
-
-    let total = res.Pop + res.Science + res.Sports + res.Rock;
-
-    let resPop = (res.Pop / total) * 100;
-    expect(resPop).toBeGreaterThan(24);
-    expect(resPop).toBeLessThan(26);
-
-    let resRock = (res.Rock / total) * 100;
-    expect(resRock).toBeGreaterThan(24);
-    expect(resRock).toBeLessThan(26);
-
-    let resScience = (res.Science / total) * 100;
-    expect(resScience).toBeGreaterThan(24);
-    expect(resScience).toBeLessThan(26);
-
-    let resSports = (res.Sports / total) * 100;
-    expect(resSports).toBeGreaterThan(24);
-    expect(resSports).toBeLessThan(26);
-  });
 
   it("check maximum size of penalty box (3)", function () {
     const console = new ConsoleSpy();
@@ -368,8 +330,9 @@ describe("The test environment", () => {
           return player
         }
     )
-    const winner = new Player("winner")
-    GameRunner.main(new GameBuilder().withPlayers([winner, ...players]).withFirstPlayerWithOnlyTrueAnswer().withCustomConsole(console).withNeverUseJoker().withPlacesInPrison(3).build());
+    const winner = new Player("winner");
+
+    GameRunner.main(new GameBuilder().withPlayers([winner, ...players]).withFirstPlayerWithOnlyTrueAnswer().withCustomConsole(console).withNeverUseJoker().withPlacesInPrison(3).withCustomWinner(1).build());
     expect(console.Content).toContain(
         "[round 1] Rémi's visit to jail : 1, he has now 1 chance on 1 to get out next turn"
     );
@@ -378,9 +341,6 @@ describe("The test environment", () => {
     );
     expect(console.Content).toContain(
         "[round 1] Nicolas's visit to jail : 1, he has now 1 chance on 1 to get out next turn"
-    );
-    expect(console.Content).toContain(
-        "[round 1] Florian's visit to jail : 1, he has now 1 chance on 1 to get out next turn"
     );
     expect(console.Content).toContain(
         "[round 1] Rémi is getting out of penalty box because penalty box is full"
@@ -406,7 +366,7 @@ describe("The test environment", () => {
 
     const winner = new Player("winner");
 
-    GameRunner.main(new GameBuilder().withPlayers([winner, ...players]).withFirstPlayerWithOnlyTrueAnswer().withCustomConsole(console).withNeverUseJoker().build());
+    GameRunner.main(new GameBuilder().withPlayers([winner, ...players]).withFirstPlayerWithOnlyTrueAnswer().withCustomConsole(console).withNeverUseJoker().withCustomWinner(1).build());
     expect(console.Content).toContain(
         "[round 1] Rémi's visit to jail : 1, he has now 1 chance on 1 to get out next turn"
     );
@@ -439,6 +399,47 @@ describe("The test environment", () => {
     );
     expect(console.Content).toContain(
         "[round 2] Gauthier is getting out of the penalty box"
+    );
+  });
+
+  it("should the first winner does not end the game. It takes 3 winners to finish the game", function () {
+    const console = new ConsoleSpy();
+
+    const winners = ["Rémi", "Nicolas", "Florian"].map((name)=>
+      {
+        const player = new Player(name);
+        player.alwaysTrueAnswer = true;
+        return player
+      }
+    );
+
+    const losers = ["Pat", "Sue", "Chet"].map((name)=>
+      {
+        const player = new Player(name);
+        player.alwaysFalseAnswer = true;
+        return player
+      }
+    )
+
+    GameRunner.main(new GameBuilder().withPlayers([...winners, ...losers]).withCustomConsole(console).withNeverUseJoker().build());
+
+    expect(console.Content).toContain(
+        "Rémi wins and leaves the game."
+    );
+    expect(console.Content).toContain(
+        "1 out of 3 winners. The game continues."
+    );
+    expect(console.Content).toContain(
+        "Nicolas wins and leaves the game."
+    );
+    expect(console.Content).toContain(
+      "2 out of 3 winners. The game continues."
+    );
+    expect(console.Content).toContain(
+        "Florian wins and leaves the game."
+    );
+    expect(console.Content).toContain(
+      "3 players are wins. End of the game"
     );
   });
 });

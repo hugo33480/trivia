@@ -1,5 +1,6 @@
 import { Player } from "./Player";
 import { IConsole } from "./IConsole";
+import { IReturnsTheObjectOfTheGame } from "./IReturnsTheObjectOfTheGame"
 
 export class Game {
   private _players: Array<Player> = [];
@@ -18,6 +19,9 @@ export class Game {
   private _nextCategoryIsScience: boolean;
   private _penaltyBoxes: Array<Player> = [];
   private _placeInPenaltyBox: number;
+  private _numberOfTargetWinners: number;
+  private _numberOfWinners: number = 0;
+  private _numberOfWinnerToEndTheGame: number;
 
   get console(): IConsole {
     return this._console;
@@ -45,7 +49,8 @@ export class Game {
     nextCategoryIsSport: boolean,
     nextCategoryIsScience: boolean,
     nbQuestions: number,
-    placeInPenaltyBox: number) {
+    placeInPenaltyBox: number,
+    numberOfWinnerToEndTheGame: number) {
     this._console = console;
     this._forceJoker = forceJoker;
     this._coinGoal = coinGoal;
@@ -54,9 +59,16 @@ export class Game {
     this._nextCategoryIsSport = nextCategoryIsSport;
     this._nextCategoryIsScience = nextCategoryIsScience;
     this._placeInPenaltyBox = placeInPenaltyBox
+    this._numberOfWinnerToEndTheGame = numberOfWinnerToEndTheGame;
     for (const player of players) {
       this.add(player);
     }
+    if (this._numberOfWinnerToEndTheGame) {
+      this._numberOfTargetWinners = this._numberOfWinnerToEndTheGame;
+    } else {
+      this._numberOfTargetWinners = this.players.length > 3 ? 3 : this.players.length === 2 ? 1 : 2;
+    }
+
     for (let i = 0; i < this._nbQuestions; i++) {
       this.popQuestions.push("Pop Question " + i);
       this.scienceQuestions.push("Science Question " + i);
@@ -204,17 +216,41 @@ export class Game {
     }
   }
 
-  public didPlayerWin(nb_round: number): boolean {
+  public didPlayerWin(nb_round: number): IReturnsTheObjectOfTheGame {
     if (
       this.players.length === 1 ||
       this.players[this.currentPlayer].gold >= this._coinGoal
     ) {
-      this._console.WriteLine(
-        "[round " + nb_round + "] " + this.players[this.currentPlayer].name + " wins the game"
-      );
-      return false;
+      const winnerName = this.players[this.currentPlayer].name;
+      this._numberOfWinners++;
+
+      this.players.splice(this.currentPlayer, 1);
+      if (this.currentPlayer == this.players.length) this.currentPlayer = 0;
+
+      let endOfGame;
+      endOfGame = this.players.length === 1 || this._numberOfTargetWinners === this._numberOfWinners;
+
+      if (!endOfGame) {
+        this._console.WriteLine(
+          "[round " + nb_round + "] " + winnerName + " wins and leaves the game. " + this._numberOfWinners + " out of " + this._numberOfTargetWinners + " winners. The game continues."
+        );
+      } else {
+        this._console.WriteLine(
+          "[round " + nb_round + "] " + winnerName + " wins and leaves the game. " + this._numberOfTargetWinners + " players are wins. End of the game"
+        );
+      }
+
+      return {
+        winnerName: winnerName,
+        numberOfPlayersStillInTheGame: this.players.length,
+        isGameEnd: endOfGame,
+      }
     }
-    return true;
+    return {
+      winnerName: null,
+      numberOfPlayersStillInTheGame: this.players.length,
+      isGameEnd: false,
+    }
   }
 
   public giveUp(nb_round: number): boolean {
@@ -232,7 +268,7 @@ export class Game {
     return false;
   }
 
-  public wrongAnswer(nb_round: number): boolean {
+  public wrongAnswer(nb_round: number): IReturnsTheObjectOfTheGame {
     if (!this.players[this.currentPlayer].joker_is_use_now) {
       this._console.WriteLine("[round " + nb_round + "] " + "Question was incorrectly answered");
       this.chooseNextCategory();
@@ -270,7 +306,11 @@ export class Game {
     }
 
     this.nextPlayer();
-    return true;
+    return {
+      winnerName: null,
+      numberOfPlayersStillInTheGame: this.players.length,
+      isGameEnd: false,
+    }
   }
 
   public chooseNextCategory() {
@@ -300,11 +340,15 @@ export class Game {
     }
   }
 
-  public wasCorrectlyAnswered(nb_round: number): boolean {
+  public wasCorrectlyAnswered(nb_round: number): IReturnsTheObjectOfTheGame {
     if (!this.players[this.currentPlayer].joker_is_use_now) {
       if (this.players[this.currentPlayer].inPenaltyBox) {
         this.nextPlayer();
-        return true;
+        return {
+          winnerName: null,
+          numberOfPlayersStillInTheGame: this.players.length,
+          isGameEnd: false,
+        }
       } else {
         this._console.WriteLine("[round " + nb_round + "] " + "Answer was corrent!!!!");
         this.players[this._currentPlayer].streak += 1;
@@ -327,7 +371,11 @@ export class Game {
     } else {
       this.players[this.currentPlayer].joker_is_use_now = false;
       this.nextPlayer();
-      return true;
+      return {
+        winnerName: null,
+        numberOfPlayersStillInTheGame: this.players.length,
+        isGameEnd: false,
+      }
     }
   }
 
