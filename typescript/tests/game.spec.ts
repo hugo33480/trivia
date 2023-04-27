@@ -319,6 +319,8 @@ describe("The test environment", () => {
 
 
   });
+
+  // THIS TEST TAKES A WHILE TO RUN. IT IS NOT AN INFINITE LOOP
   it("test stats", function () {
     let res: { [key: string]: number } = {
       Pop: 0,
