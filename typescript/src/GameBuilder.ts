@@ -21,6 +21,10 @@ export class GameBuilder {
   private nbQuestions: number = 50;
   private numberOfWinnerToEndTheGame: number;
 
+  private enableRestart: boolean = false;
+
+  private forceRestart: number = 0;
+
   withTechnoQuestions() {
     this.technoQuestion = true;
     return this;
@@ -90,7 +94,7 @@ export class GameBuilder {
     this.placesInJail = nbr;
     return this;
   }
-  
+
   withCustomWinner(numberOfWinnerToEndTheGame: number): GameBuilder {
     this.numberOfWinnerToEndTheGame = numberOfWinnerToEndTheGame;
     return this;
@@ -101,7 +105,17 @@ export class GameBuilder {
   //   return this;
   // }
 
+  withRestart() {
+    this.enableRestart = true;
+    return this;
+  }
+
+  withRestartForced(nb: number) {
+    this.forceRestart = nb - 1;
+    return this;
+  }
+
   build(): Game {
-    return new Game(this.console, this.players, this.technoQuestion, this.forceJoker, this.neverUseJoker, this.coinGoal, this.nextCategoryIsSport, this.nextCategoryIsScience, this.nbQuestions, this.placesInJail, this.numberOfWinnerToEndTheGame);
+    return new Game(this.console, this.players, this.technoQuestion, this.forceJoker, this.neverUseJoker, this.coinGoal, this.nextCategoryIsSport, this.nextCategoryIsScience, this.nbQuestions, this.placesInJail, this.enableRestart, this.forceRestart, this.numberOfWinnerToEndTheGame);
   }
 }

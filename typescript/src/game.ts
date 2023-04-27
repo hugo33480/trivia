@@ -23,12 +23,40 @@ export class Game {
   private _numberOfWinners: number = 0;
   private _numberOfWinnerToEndTheGame: number;
 
+  private _enableRestart: boolean;
+
+  private _forceRestart: number;
+
+  get forceRestart(): number {
+    return this._forceRestart;
+  }
+
+  set forceRestart(nb: number) {
+    this._forceRestart = nb;
+  }
+
   get console(): IConsole {
     return this._console;
   }
 
+  set console(console: IConsole) {
+    this._console = console;
+  }
+
+  get penaltyBoxes(): Array<Player> {
+    return this._penaltyBoxes;
+  }
+
+  set penaltyBoxes(players: Array<Player>) {
+    this._penaltyBoxes = players;
+  }
+
   get players(): Array<Player> {
     return this._players;
+  }
+
+  set players(players: Array<Player>) {
+    this._players = players;
   }
 
   get currentPlayer(): number {
@@ -50,6 +78,8 @@ export class Game {
     nextCategoryIsScience: boolean,
     nbQuestions: number,
     placeInPenaltyBox: number,
+    enableRestart: boolean,
+    forceRestart: number,
     numberOfWinnerToEndTheGame: number) {
     this._console = console;
     this._forceJoker = forceJoker;
@@ -60,6 +90,8 @@ export class Game {
     this._nextCategoryIsScience = nextCategoryIsScience;
     this._placeInPenaltyBox = placeInPenaltyBox
     this._numberOfWinnerToEndTheGame = numberOfWinnerToEndTheGame;
+    this._enableRestart = enableRestart;
+    this._forceRestart = forceRestart;
     for (const player of players) {
       this.add(player);
     }
@@ -379,6 +411,16 @@ export class Game {
     }
   }
 
+  public restart(): boolean {
+
+    if(this.forceRestart > 0) {
+      if(this.forceRestart === 1) {}
+      return true;
+    }
+
+    return this._enableRestart ? Math.random() >= 0.5 : false;
+  }
+
   isPlayerUseJoker(player: Player): boolean {
     if (this._neverUseJoker) return false;
 
@@ -398,5 +440,28 @@ export class Game {
     player.joker_is_use_now = true;
     this._console.WriteLine("[round " + nb_round + "] " + this.players[this.currentPlayer].name + ' uses a joker');
     this._console.WriteLine("[round " + nb_round + "] " + this.players[this.currentPlayer].name + ' doesn\'t earn gold this turn. He has ' + this.players[this.currentPlayer].gold + " gold");
+  }
+
+  public clone(): Game {
+    const gameCopy = Object.create(Game.prototype);
+    Object.assign(gameCopy, this);
+
+    const players = [];
+    for (const player of this.players) {
+      players.push(Object.assign(Object.create(Player.prototype), player));
+    }
+    gameCopy.players = players
+
+    const penaltyBoxes = [];
+    for (const player of this.penaltyBoxes) {
+      penaltyBoxes.push(Object.assign(Object.create(Player.prototype), player));
+    }
+    gameCopy.penaltyBoxes = penaltyBoxes;
+
+    gameCopy.console = this.console;
+
+    this.forceRestart--;
+
+    return gameCopy;
   }
 }

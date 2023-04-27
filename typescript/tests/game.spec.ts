@@ -1,7 +1,7 @@
-import {GameBuilder} from "../src/GameBuilder";
-import {ConsoleSpy} from "./ConsoleSpy";
-import {GameRunner} from "../src/game-runner";
-import {Player} from "../src/Player";
+import { GameBuilder } from "../src/GameBuilder";
+import { ConsoleSpy } from "./ConsoleSpy";
+import { GameRunner } from "../src/game-runner";
+import { Player } from "../src/Player";
 
 describe("The test environment", () => {
   it("should test techno question", function () {
@@ -319,6 +319,44 @@ describe("The test environment", () => {
 
 
   });
+  it("test stats", function () {
+    let res: { [key: string]: number } = {
+      Pop: 0,
+      Sports: 0,
+      Rock: 0,
+      Science: 0,
+    };
+    const console = new ConsoleSpy();
+    for (let i = 0; i < 3000; i++) {
+      GameRunner.main(new GameBuilder().withCustomConsole(console).build());
+      res.Pop += (console.Content.match(/The category is Pop/g) || []).length;
+      res.Rock += (console.Content.match(/The category is Rock/g) || []).length;
+      res.Science += (
+        console.Content.match(/The category is Science/g) || []
+      ).length;
+      res.Sports += (
+        console.Content.match(/The category is Sports/g) || []
+      ).length;
+    }
+
+    let total = res.Pop + res.Science + res.Sports + res.Rock;
+
+    let resPop = (res.Pop / total) * 100;
+    expect(resPop).toBeGreaterThan(24);
+    expect(resPop).toBeLessThan(26);
+
+    let resRock = (res.Rock / total) * 100;
+    expect(resRock).toBeGreaterThan(24);
+    expect(resRock).toBeLessThan(26);
+
+    let resScience = (res.Science / total) * 100;
+    expect(resScience).toBeGreaterThan(24);
+    expect(resScience).toBeLessThan(26);
+
+    let resSports = (res.Sports / total) * 100;
+    expect(resSports).toBeGreaterThan(24);
+    expect(resSports).toBeLessThan(26);
+  });
 
   it("check maximum size of penalty box (3)", function () {
     const console = new ConsoleSpy();
@@ -341,6 +379,9 @@ describe("The test environment", () => {
     );
     expect(console.Content).toContain(
         "[round 1] Nicolas's visit to jail : 1, he has now 1 chance on 1 to get out next turn"
+    );
+    expect(console.Content).toContain(
+        "[round 1] Florian's visit to jail : 1, he has now 1 chance on 1 to get out next turn"
     );
     expect(console.Content).toContain(
         "[round 1] Rémi is getting out of penalty box because penalty box is full"
@@ -400,6 +441,36 @@ describe("The test environment", () => {
     expect(console.Content).toContain(
         "[round 2] Gauthier is getting out of the penalty box"
     );
+  });
+
+  it("should game restart once", function () {
+    const console = new ConsoleSpy();
+    GameRunner.main(
+        new GameBuilder().withCustomConsole(console).withCoinGoal(15).withRestartForced(1).build()
+    );
+    expect(
+        (console.Content.match(/Une nouvelle partie commence/g) || []).length
+    ).toBe(1);
+  });
+
+  it("should game restart two times", function () {
+    const console = new ConsoleSpy();
+    GameRunner.main(
+        new GameBuilder().withCustomConsole(console).withCoinGoal(15).withRestartForced(2).build()
+    );
+    expect(
+        (console.Content.match(/Une nouvelle partie commence/g) || []).length
+    ).toBe(2);
+  });
+
+  it("should game restart three times", function () {
+    const console = new ConsoleSpy();
+    GameRunner.main(
+        new GameBuilder().withCustomConsole(console).withCoinGoal(15).withRestartForced(3).build()
+    );
+    expect(
+        (console.Content.match(/Une nouvelle partie commence/g) || []).length
+    ).toBe(3);
   });
 
   it("should the first winner does not end the game. It takes 3 winners to finish the game", function () {
