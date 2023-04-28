@@ -1,7 +1,7 @@
-import {Game} from "./game";
-import {Player} from "./Player";
-import {IConsole} from "./IConsole";
-import {SystemConsole} from "./SystemConsole";
+import { Game } from "./game";
+import { Player } from "./Player";
+import { IConsole } from "./IConsole";
+import { SystemConsole } from "./SystemConsole";
 
 export class GameBuilder {
   private players: Player[] = [
@@ -17,15 +17,13 @@ export class GameBuilder {
   private nextCategoryIsScience: boolean = false;
   private technoQuestion: boolean = false;
   private placesInJail: number = 0;
-
   private nbQuestions: number = 50;
   private numberOfWinnerToEndTheGame: number;
-
   private enableRestart: boolean = false;
-
   private forceRestart: number = 0;
+  private extensionPack: boolean = false;
 
-  withTechnoQuestions() {
+  withTechnoQuestions(): GameBuilder {
     this.technoQuestion = true;
     return this;
   }
@@ -37,22 +35,22 @@ export class GameBuilder {
 
   withFirstPlayerWithOnlyFalseAnswer(): GameBuilder {
     this.players[0].alwaysFalseAnswer = true;
-    return this
+    return this;
   }
 
   withFirstPlayerWithOnlyTrueAnswer(): GameBuilder {
     this.players[0].alwaysTrueAnswer = true;
-    return this
+    return this;
   }
 
   withFirstPlayerAlwaysGettingOut(): GameBuilder {
     this.players[0].alwaysGetOutOfPenaltyBox = true;
-    return this
+    return this;
   }
 
   withFirstPlayerAlwaysInJail(): GameBuilder {
     this.players[0].alwaysInJail = true;
-    return this
+    return this;
   }
 
   withCustomConsole(console: IConsole): GameBuilder {
@@ -87,10 +85,10 @@ export class GameBuilder {
 
   withOneQuestions(): GameBuilder {
     this.nbQuestions = 1;
-    return this
+    return this;
   }
 
-  withPlacesInPrison(nbr : number): GameBuilder {
+  withPlacesInPrison(nbr: number): GameBuilder {
     this.placesInJail = nbr;
     return this;
   }
@@ -105,17 +103,37 @@ export class GameBuilder {
   //   return this;
   // }
 
-  withRestart() {
+  withRestart(): GameBuilder {
     this.enableRestart = true;
     return this;
   }
 
-  withRestartForced(nb: number) {
+  withRestartForced(nb: number): GameBuilder {
     this.forceRestart = nb - 1;
     return this;
   }
 
+  withExtensionPack(): GameBuilder {
+    this.extensionPack = true;
+    return this;
+  }
+
   build(): Game {
-    return new Game(this.console, this.players, this.technoQuestion, this.forceJoker, this.neverUseJoker, this.coinGoal, this.nextCategoryIsSport, this.nextCategoryIsScience, this.nbQuestions, this.placesInJail, this.enableRestart, this.forceRestart, this.numberOfWinnerToEndTheGame);
+    return new Game(
+      this.console,
+      this.players,
+      this.technoQuestion,
+      this.forceJoker,
+      this.neverUseJoker,
+      this.coinGoal,
+      this.nextCategoryIsSport,
+      this.nextCategoryIsScience,
+      this.nbQuestions,
+      this.placesInJail,
+      this.enableRestart,
+      this.forceRestart,
+      this.numberOfWinnerToEndTheGame,
+      this.extensionPack
+    );
   }
 }

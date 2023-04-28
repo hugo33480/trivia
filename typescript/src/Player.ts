@@ -10,15 +10,15 @@ export class Player {
   private _gold: number;
   private _joker: boolean;
   private _joker_is_use_now: boolean;
-  private _place: number
+  private _place: number;
 
   private _alwaysFalseAnswer: boolean;
   private _alwaysGetOutOfPenaltyBox: boolean;
   private _inPenaltyBox: boolean;
   // private _joker_is_use_now: boolean;
   private _giveUp: boolean;
-  private _streak: number = 0
-  private _alwaysTrueAnswer : boolean;
+  private _streak: number = 0;
+  private _alwaysTrueAnswer: boolean;
   private _visiteInJail: number = 0;
   private _turnInJail: number = 0;
   private _alwaysInJail: boolean = false;
@@ -122,20 +122,21 @@ export class Player {
   }
 
   public goToJail() {
-    this._visiteInJail++
+    this._visiteInJail++;
   }
   public leaveJail() {
-    this._turnInJail = 0
+    this._turnInJail = 0;
   }
   public stayInJail() {
-    this._turnInJail++
+    this._turnInJail++;
   }
   public getOutOfJail(): boolean {
     if (this._alwaysInJail && this._visiteInJail != 1) return false;
-    return this.chanceToGetOutOfJail > Math.random()
+    return this.chanceToGetOutOfJail > Math.random();
   }
-  get chanceToGetOutOfJail() : number {
-    const chance = Math.round(((1/this._visiteInJail ) + this._turnInJail * 0.1)*100)/100
+  get chanceToGetOutOfJail(): number {
+    const chance =
+      Math.round((1 / this._visiteInJail + this._turnInJail * 0.1) * 100) / 100;
     return chance > 1 ? 1 : chance;
   }
 }

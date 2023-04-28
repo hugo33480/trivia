@@ -1,6 +1,6 @@
 import { Player } from "./Player";
 import { IConsole } from "./IConsole";
-import { IReturnsTheObjectOfTheGame } from "./IReturnsTheObjectOfTheGame"
+import { IReturnsTheObjectOfTheGame } from "./IReturnsTheObjectOfTheGame";
 
 export class Game {
   private _players: Array<Player> = [];
@@ -22,6 +22,7 @@ export class Game {
   private _numberOfTargetWinners: number;
   private _numberOfWinners: number = 0;
   private _numberOfWinnerToEndTheGame: number;
+  private _enableExtensionPack: boolean;
 
   private _enableRestart: boolean;
 
@@ -80,7 +81,9 @@ export class Game {
     placeInPenaltyBox: number,
     enableRestart: boolean,
     forceRestart: number,
-    numberOfWinnerToEndTheGame: number) {
+    numberOfWinnerToEndTheGame: number,
+    enableExtensionPack: boolean
+  ) {
     this._console = console;
     this._forceJoker = forceJoker;
     this._coinGoal = coinGoal;
@@ -88,17 +91,19 @@ export class Game {
     this._neverUseJoker = neverUseJoker;
     this._nextCategoryIsSport = nextCategoryIsSport;
     this._nextCategoryIsScience = nextCategoryIsScience;
-    this._placeInPenaltyBox = placeInPenaltyBox
+    this._placeInPenaltyBox = placeInPenaltyBox;
     this._numberOfWinnerToEndTheGame = numberOfWinnerToEndTheGame;
     this._enableRestart = enableRestart;
     this._forceRestart = forceRestart;
+    this._enableExtensionPack = enableExtensionPack;
     for (const player of players) {
       this.add(player);
     }
     if (this._numberOfWinnerToEndTheGame) {
       this._numberOfTargetWinners = this._numberOfWinnerToEndTheGame;
     } else {
-      this._numberOfTargetWinners = this.players.length > 3 ? 3 : this.players.length === 2 ? 1 : 2;
+      this._numberOfTargetWinners =
+        this.players.length > 3 ? 3 : this.players.length === 2 ? 1 : 2;
     }
 
     for (let i = 0; i < this._nbQuestions; i++) {
@@ -140,13 +145,11 @@ export class Game {
 
   public isCoinGoalValid() {
     if (this._coinGoal > 5) return true;
-    this._console.WriteLine(
-      "The coin goal must be 6 or higher"
-    );
+    this._console.WriteLine("The coin goal must be 6 or higher");
     return false;
   }
 
-  public nextPlayer(){
+  public nextPlayer() {
     this.currentPlayer += 1;
     if (this.currentPlayer == this.players.length) this.currentPlayer = 0;
   }
@@ -159,9 +162,12 @@ export class Game {
         this.players[this.currentPlayer].place - 12;
     }
     this._console.WriteLine(
-      "[round " + nb_round + "] " + this.players[this.currentPlayer].name +
-      "'s new location is " +
-      this.players[this.currentPlayer].place
+      "[round " +
+        nb_round +
+        "] " +
+        this.players[this.currentPlayer].name +
+        "'s new location is " +
+        this.players[this.currentPlayer].place
     );
   }
   public roll(roll: number, nb_round: number) {
@@ -172,25 +178,39 @@ export class Game {
     this._console.WriteLine(" ");
     this._console.WriteLine("---------- New game round  ----------");
     this._console.WriteLine(
-      "[round " + nb_round + "] " + this.players[this.currentPlayer].name + " is the current player. Has " + this.players[this.currentPlayer].gold + " gold"
+      "[round " +
+        nb_round +
+        "] " +
+        this.players[this.currentPlayer].name +
+        " is the current player. Has " +
+        this.players[this.currentPlayer].gold +
+        " gold"
     );
-    this._console.WriteLine("[round " + nb_round + "] " + "They have rolled a " + roll);
+    this._console.WriteLine(
+      "[round " + nb_round + "] " + "They have rolled a " + roll
+    );
 
     if (this.players[this.currentPlayer].inPenaltyBox) {
-      if (
-          this.players[this.currentPlayer].getOutOfJail()
-      ) {
+      if (this.players[this.currentPlayer].getOutOfJail()) {
         this.players[this.currentPlayer].inPenaltyBox = false;
         this.players[this.currentPlayer].leaveJail();
         this._console.WriteLine(
-          "[round " + nb_round + "] " + this.players[this.currentPlayer].name +
-          " is getting out of the penalty box"
+          "[round " +
+            nb_round +
+            "] " +
+            this.players[this.currentPlayer].name +
+            " is getting out of the penalty box"
         );
         this.changePlayerPosition(roll, nb_round);
 
-
         this.pickCategory();
-        this._console.WriteLine("[round " + nb_round + "] " + "The category is " + this._currentCategoryChoosed);
+        this._console.WriteLine(
+          "[round " +
+            nb_round +
+            "] " +
+            "The category is " +
+            this._currentCategoryChoosed
+        );
         if (this.isPlayerUseJoker(this.players[this.currentPlayer])) {
           this.useJoker(this.players[this.currentPlayer], nb_round);
         } else {
@@ -199,16 +219,26 @@ export class Game {
       } else {
         this.players[this.currentPlayer].stayInJail();
         this._console.WriteLine(
-          "[round " + nb_round + "] " +
-          this.players[this.currentPlayer].name +
-            " is not getting out of the penalty box, it's chance to get out are now " + this.players[this.currentPlayer].chanceToGetOutOfJail + " on 1"
+          "[round " +
+            nb_round +
+            "] " +
+            this.players[this.currentPlayer].name +
+            " is not getting out of the penalty box, it's chance to get out are now " +
+            this.players[this.currentPlayer].chanceToGetOutOfJail +
+            " on 1"
         );
         this.players[this.currentPlayer].inPenaltyBox = true;
       }
     } else {
       this.changePlayerPosition(roll, nb_round);
       this.pickCategory();
-      this._console.WriteLine("[round " + nb_round + "] " + "The category is " + this._currentCategoryChoosed);
+      this._console.WriteLine(
+        "[round " +
+          nb_round +
+          "] " +
+          "The category is " +
+          this._currentCategoryChoosed
+      );
       if (this.isPlayerUseJoker(this.players[this.currentPlayer])) {
         this.useJoker(this.players[this.currentPlayer], nb_round);
       } else {
@@ -242,9 +272,20 @@ export class Game {
   }
 
   pickCategory(): void {
-    const allCategory = ["Pop", "Sports", "Science", "Rock"]
+    const allCategory = ["Pop", "Sports", "Science", "Rock"];
+    if (this._enableExtensionPack) {
+      allCategory.push(
+        "Rap",
+        "Philosophy",
+        "Litterature",
+        "Geography",
+        "People",
+        "Techno"
+      );
+    }
     if (this._currentCategoryChoosed === "") {
-      this._currentCategoryChoosed = allCategory[Math.floor(Math.random() * (allCategory.length))]
+      this._currentCategoryChoosed =
+        allCategory[Math.floor(Math.random() * allCategory.length)];
     }
   }
 
@@ -260,15 +301,31 @@ export class Game {
       if (this.currentPlayer == this.players.length) this.currentPlayer = 0;
 
       let endOfGame;
-      endOfGame = this.players.length === 1 || this._numberOfTargetWinners === this._numberOfWinners;
+      endOfGame =
+        this.players.length === 1 ||
+        this._numberOfTargetWinners === this._numberOfWinners;
 
       if (!endOfGame) {
         this._console.WriteLine(
-          "[round " + nb_round + "] " + winnerName + " wins and leaves the game. " + this._numberOfWinners + " out of " + this._numberOfTargetWinners + " winners. The game continues."
+          "[round " +
+            nb_round +
+            "] " +
+            winnerName +
+            " wins and leaves the game. " +
+            this._numberOfWinners +
+            " out of " +
+            this._numberOfTargetWinners +
+            " winners. The game continues."
         );
       } else {
         this._console.WriteLine(
-          "[round " + nb_round + "] " + winnerName + " wins and leaves the game. " + this._numberOfTargetWinners + " players are wins. End of the game"
+          "[round " +
+            nb_round +
+            "] " +
+            winnerName +
+            " wins and leaves the game. " +
+            this._numberOfTargetWinners +
+            " players are wins. End of the game"
         );
       }
 
@@ -276,13 +333,13 @@ export class Game {
         winnerName: winnerName,
         numberOfPlayersStillInTheGame: this.players.length,
         isGameEnd: endOfGame,
-      }
+      };
     }
     return {
       winnerName: null,
       numberOfPlayersStillInTheGame: this.players.length,
       isGameEnd: false,
-    }
+    };
   }
 
   public giveUp(nb_round: number): boolean {
@@ -291,7 +348,11 @@ export class Game {
       this.players[this.currentPlayer].giveUp
     ) {
       this._console.WriteLine(
-        "[round " + nb_round + "] " + this.players[this.currentPlayer].name + " leaves the game"
+        "[round " +
+          nb_round +
+          "] " +
+          this.players[this.currentPlayer].name +
+          " leaves the game"
       );
       this.players.splice(this.currentPlayer, 1);
       if (this.currentPlayer == this.players.length) this.currentPlayer = 0;
@@ -302,18 +363,41 @@ export class Game {
 
   public wrongAnswer(nb_round: number): IReturnsTheObjectOfTheGame {
     if (!this.players[this.currentPlayer].joker_is_use_now) {
-      this._console.WriteLine("[round " + nb_round + "] " + "Question was incorrectly answered");
+      this._console.WriteLine(
+        "[round " + nb_round + "] " + "Question was incorrectly answered"
+      );
       this.chooseNextCategory();
       this._console.WriteLine(
-        "[round " + nb_round + "] " + this.players[this.currentPlayer].name + " has chosen the next category which is : " + this._currentCategoryChoosed);
-      this._console.WriteLine("[round " + nb_round + "] " + this.players[this._currentPlayer].name + " was sent to the penalty box");
+        "[round " +
+          nb_round +
+          "] " +
+          this.players[this.currentPlayer].name +
+          " has chosen the next category which is : " +
+          this._currentCategoryChoosed
+      );
+      this._console.WriteLine(
+        "[round " +
+          nb_round +
+          "] " +
+          this.players[this._currentPlayer].name +
+          " was sent to the penalty box"
+      );
       this._players[this._currentPlayer].inPenaltyBox = true;
-      this._console.WriteLine("[round " + nb_round + "] " + this.players[this._currentPlayer].name + " answer streak was reset to 0");
-      this.players[this._currentPlayer].streak = 0
+      this._console.WriteLine(
+        "[round " +
+          nb_round +
+          "] " +
+          this.players[this._currentPlayer].name +
+          " answer streak was reset to 0"
+      );
+      this.players[this._currentPlayer].streak = 0;
 
       this.players[this.currentPlayer].goToJail();
-      this._console.WriteLine("[round " + nb_round + "] " +
-        this.players[this._currentPlayer].name +
+      this._console.WriteLine(
+        "[round " +
+          nb_round +
+          "] " +
+          this.players[this._currentPlayer].name +
           "'s visit to jail : " +
           this.players[this._currentPlayer].visitInJail +
           ", he has now 1 chance on " +
@@ -324,11 +408,19 @@ export class Game {
         `${this.players[this._currentPlayer].name} answer streak was reset to 0`
       );
       this.players[this._currentPlayer].streak = 0;
-      this._penaltyBoxes.unshift(this.players[this._currentPlayer])
+      this._penaltyBoxes.unshift(this.players[this._currentPlayer]);
 
-      if (this._placeInPenaltyBox != 0 && this._penaltyBoxes.length > this._placeInPenaltyBox){
-        this._console.WriteLine("[round " + nb_round + "] " +
-        this._penaltyBoxes[this._placeInPenaltyBox].name + " is getting out of penalty box because penalty box is full")
+      if (
+        this._placeInPenaltyBox != 0 &&
+        this._penaltyBoxes.length > this._placeInPenaltyBox
+      ) {
+        this._console.WriteLine(
+          "[round " +
+            nb_round +
+            "] " +
+            this._penaltyBoxes[this._placeInPenaltyBox].name +
+            " is getting out of penalty box because penalty box is full"
+        );
         this._penaltyBoxes[this._placeInPenaltyBox].inPenaltyBox = false;
         this._penaltyBoxes[this._placeInPenaltyBox].leaveJail();
         this._penaltyBoxes.pop();
@@ -342,7 +434,7 @@ export class Game {
       winnerName: null,
       numberOfPlayersStillInTheGame: this.players.length,
       isGameEnd: false,
-    }
+    };
   }
 
   public chooseNextCategory() {
@@ -380,18 +472,34 @@ export class Game {
           winnerName: null,
           numberOfPlayersStillInTheGame: this.players.length,
           isGameEnd: false,
-        }
+        };
       } else {
-        this._console.WriteLine("[round " + nb_round + "] " + "Answer was corrent!!!!");
+        this._console.WriteLine(
+          "[round " + nb_round + "] " + "Answer was corrent!!!!"
+        );
         this.players[this._currentPlayer].streak += 1;
-        this._console.WriteLine("[round " + nb_round + "] " + this.players[this._currentPlayer].name + " streak is now " + this.players[this._currentPlayer].streak);
-        this._players[this._currentPlayer].gold = Math.min(this.players[this._currentPlayer].streak + this._players[this._currentPlayer].gold, this._coinGoal);
+        this._console.WriteLine(
+          "[round " +
+            nb_round +
+            "] " +
+            this.players[this._currentPlayer].name +
+            " streak is now " +
+            this.players[this._currentPlayer].streak
+        );
+        this._players[this._currentPlayer].gold = Math.min(
+          this.players[this._currentPlayer].streak +
+            this._players[this._currentPlayer].gold,
+          this._coinGoal
+        );
 
         this._console.WriteLine(
-          "[round " + nb_round + "] " + this._players[this._currentPlayer].name +
-          " now has " +
-          this.players[this.currentPlayer].gold +
-          " Gold Coins."
+          "[round " +
+            nb_round +
+            "] " +
+            this._players[this._currentPlayer].name +
+            " now has " +
+            this.players[this.currentPlayer].gold +
+            " Gold Coins."
         );
 
         var winner = this.didPlayerWin(nb_round);
@@ -407,14 +515,14 @@ export class Game {
         winnerName: null,
         numberOfPlayersStillInTheGame: this.players.length,
         isGameEnd: false,
-      }
+      };
     }
   }
 
   public restart(): boolean {
-
-    if(this.forceRestart > 0) {
-      if(this.forceRestart === 1) {}
+    if (this.forceRestart > 0) {
+      if (this.forceRestart === 1) {
+      }
       return true;
     }
 
@@ -438,8 +546,22 @@ export class Game {
   public useJoker(player: Player, nb_round: number): void {
     player.joker = false;
     player.joker_is_use_now = true;
-    this._console.WriteLine("[round " + nb_round + "] " + this.players[this.currentPlayer].name + ' uses a joker');
-    this._console.WriteLine("[round " + nb_round + "] " + this.players[this.currentPlayer].name + ' doesn\'t earn gold this turn. He has ' + this.players[this.currentPlayer].gold + " gold");
+    this._console.WriteLine(
+      "[round " +
+        nb_round +
+        "] " +
+        this.players[this.currentPlayer].name +
+        " uses a joker"
+    );
+    this._console.WriteLine(
+      "[round " +
+        nb_round +
+        "] " +
+        this.players[this.currentPlayer].name +
+        " doesn't earn gold this turn. He has " +
+        this.players[this.currentPlayer].gold +
+        " gold"
+    );
   }
 
   public clone(): Game {
@@ -450,7 +572,7 @@ export class Game {
     for (const player of this.players) {
       players.push(Object.assign(Object.create(Player.prototype), player));
     }
-    gameCopy.players = players
+    gameCopy.players = players;
 
     const penaltyBoxes = [];
     for (const player of this.penaltyBoxes) {
